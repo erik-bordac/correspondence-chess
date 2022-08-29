@@ -20,6 +20,8 @@ namespace Chess_SchoolProject.ChessFigures
 
 		public bool IsValidMove(Square source, Square target, ChessGame game)
 		{
+			if (target.Content != null && source.Content.Color == target.Content.Color) return false;
+
 			if ( (Math.Abs(source.Row - target.Row) == 1 && Math.Abs(source.File - target.File) == 2) ||
 				 (Math.Abs(source.Row - target.Row) == 2 && Math.Abs(source.File - target.File) == 1) )
 			{

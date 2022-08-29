@@ -20,6 +20,8 @@ namespace Chess_SchoolProject.ChessFigures
 
 		public bool IsValidMove(Square source, Square target, ChessGame game)
 		{
+			if (target.Content != null && source.Content.Color == target.Content.Color) return false;
+
 			bool diagonal1 = true;
 			bool diagonal2 = true;
 			bool diagonal3 = true;

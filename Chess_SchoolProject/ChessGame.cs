@@ -78,15 +78,34 @@ namespace Chess_SchoolProject
 			// Check players turn
 			if (moveFrom.Content.Color != Turn) return;
 
-			// Check for color
-			if (moveTo.Content != null && moveFrom.Content.Color == moveTo.Content.Color) return;
-
 			if (moveFrom.Content.IsValidMove(moveFrom, moveTo, this))
 			{
 				// Check for revealed check
 
-				moveTo.Content = moveFrom.Content;
-				moveFrom.Content = null;
+				// castle movement handling
+				if (moveFrom.Content is King && moveTo.Content is Rook && moveFrom.Content.Color == moveTo.Content.Color)
+				{
+					Rook tmp = (Rook)moveTo.Content;
+					tmp.FirstMove = false;
+
+					if (moveFrom.File < moveTo.File)
+					{
+						gameArr[moveFrom.Row][moveFrom.File + 2].Content = moveFrom.Content;
+						moveFrom.Content = null;
+						gameArr[moveFrom.Row][moveTo.File - 2].Content = moveTo.Content;
+						moveTo.Content = null;
+					} else
+					{
+						gameArr[moveFrom.Row][moveFrom.File - 2].Content = moveFrom.Content;
+						moveFrom.Content = null;
+						gameArr[moveFrom.Row][moveTo.File + 3].Content = moveTo.Content;
+						moveTo.Content = null;
+					}
+				} else		// non castle movement handling
+				{
+					moveTo.Content = moveFrom.Content;
+					moveFrom.Content = null;
+				}
 				// Change player turn
 				if (Turn == "W")
 				{

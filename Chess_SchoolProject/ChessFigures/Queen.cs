@@ -20,24 +20,7 @@ namespace Chess_SchoolProject.ChessFigures
 
 		public bool IsValidMove(Square source, Square target, ChessGame game)
 		{
-			//for (int i = 0; i < 8; i++)
-			//{
-			//	if ((source.File + i == target.File && source.Row + i == target.Row) ||
-			//		 (source.File + i == target.File && source.Row - i == target.Row) ||
-			//		 (source.File - i == target.File && source.Row + i == target.Row) ||
-			//		 (source.File - i == target.File && source.Row - i == target.Row))
-			//	{
-			//		return true;
-			//	}
-			//}
-
-			//if ((source.Row != target.Row && source.File == target.File) ||
-			//	(source.Row == target.Row && source.File != target.File))
-			//{
-			//	return true;
-			//}
-
-			//return false;
+			if (target.Content != null && source.Content.Color == target.Content.Color) return false;
 
 			bool row1 = true;
 			bool row2 = true;

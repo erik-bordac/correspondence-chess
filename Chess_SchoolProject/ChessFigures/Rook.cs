@@ -8,6 +8,7 @@ namespace Chess_SchoolProject.ChessFigures
 {
 	class Rook : IFigure
 	{
+		public bool FirstMove = true;
 		public string ImgPath { get; set; }
 		public string Color { get; set; }
 
@@ -20,12 +21,7 @@ namespace Chess_SchoolProject.ChessFigures
 
 		public bool IsValidMove(Square source, Square target, ChessGame game)
 		{
-			//if ( (source.Row != target.Row && source.File == target.File) ||
-			//	 (source.Row == target.Row && source.File != target.File) )
-			//{
-			//	return true;
-			//}
-			//else return false;
+			if (target.Content != null && source.Content.Color == target.Content.Color) return false;
 
 			bool row1 = true;
 			bool row2 = true;
@@ -41,7 +37,7 @@ namespace Chess_SchoolProject.ChessFigures
 
 					if (row1 && game.gameArr[checkedRow][source.File].Content != null) row1 = false;
 
-					if (checkedRow == target.Row && source.File == target.File) return true;
+					if (checkedRow == target.Row && source.File == target.File) { FirstMove = false; return true; }
 				}
 				if (row2)
 				{
@@ -51,7 +47,7 @@ namespace Chess_SchoolProject.ChessFigures
 
 					if (row2 && game.gameArr[checkedRow][source.File].Content != null) row2 = false;
 
-					if (checkedRow == target.Row && source.File == target.File) return true;
+					if (checkedRow == target.Row && source.File == target.File) { FirstMove = false; return true; }
 				}
 
 				if (file1)
@@ -62,7 +58,7 @@ namespace Chess_SchoolProject.ChessFigures
 
 					if (file1 && game.gameArr[source.Row][checkedFile].Content != null) file1 = false;
 
-					if (source.Row == target.Row && checkedFile == target.File) return true;
+					if (source.Row == target.Row && checkedFile == target.File) { FirstMove = false; return true; }
 				}
 
 				if (file2)
@@ -73,7 +69,7 @@ namespace Chess_SchoolProject.ChessFigures
 
 					if (file2 && game.gameArr[source.Row][checkedFile].Content != null) file2 = false;
 
-					if (source.Row == target.Row && checkedFile == target.File) return true;
+					if (source.Row == target.Row && checkedFile == target.File) { FirstMove = false; return true; }
 				}
 			}
 			return false;
