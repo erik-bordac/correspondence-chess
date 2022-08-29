@@ -1,0 +1,103 @@
+﻿<Window x:Class="Chess_SchoolProject.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Chess_SchoolProject"
+        mc:Ignorable="d"
+        Title="Chess" Height="700" Width="1000"
+		MinWidth="{Binding ElementName=lst, Path=ActualWidth}">
+
+	<Window.Resources>
+		<local:MathConverter x:Key="MathConverter"/>
+		
+		<DataTemplate x:Key="DataTemplate_Level2">
+			<Label Background="{Binding Color}"
+				   Grid.Row="{Binding Row}"
+				   Grid.Column="{Binding File}"
+				   Drop="Grid_Drop">
+				<Image Source="{Binding Content.ImgPath}" Stretch="Fill"
+					   PreviewMouseLeftButtonDown="Grid_PreviewMouseLeftButtonDown" 
+					   PreviewMouseMove="Grid_MouseMove"/>
+			</Label>
+		</DataTemplate>
+		
+		<DataTemplate x:Key="DataTemplate_Level1">
+			<ItemsControl ItemsSource="{Binding}" ItemTemplate="{DynamicResource DataTemplate_Level2}">
+				<ItemsControl.ItemsPanel>
+					<ItemsPanelTemplate>
+						<UniformGrid Columns="8" Rows="1"
+									 MinWidth="{Binding ElementName=lst, Path=ActualWidth, Converter={StaticResource MathConverter},
+							ConverterParameter=@VALUE/8}"
+									 MinHeight="{Binding ElementName=lst, Path=ActualWidth, Converter={StaticResource MathConverter},
+							ConverterParameter=@VALUE/8}"
+									 AllowDrop="True"/>
+					</ItemsPanelTemplate>
+				</ItemsControl.ItemsPanel>
+			</ItemsControl>
+		</DataTemplate>
+
+	</Window.Resources>
+	
+	
+	<Grid Background="#3F4E4F">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="40"/>
+			<RowDefinition Height="1*"/>
+		</Grid.RowDefinitions>
+
+		<Border Background="#2C3639"
+				Grid.Row="0">
+			<Grid>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="0.375*"/>
+					<ColumnDefinition Width="0.25*"/>
+					<ColumnDefinition Width="0.375*"/>
+				</Grid.ColumnDefinitions>
+
+				<TextBlock Text="Chess"
+						   Foreground="#DCD7C9"
+						   FontSize="32"
+						   Grid.Column="1"
+						   HorizontalAlignment="Center"
+						   VerticalAlignment="Center"/>
+
+				<StackPanel Orientation="Horizontal"
+							HorizontalAlignment="Right"
+							Grid.Column="2">
+					<Button Content="Play Local"
+							Background="#DCD7C9"
+							Foreground="#2C3639"
+							FontSize="16"
+							Height="32"
+							FontWeight="Bold"
+							Margin="10,0,10,0"/>
+					<Button Content="Play Online"
+							Background="#DCD7C9"
+							Foreground="#2C3639"
+							FontSize="16"
+							Height="32"
+							FontWeight="Bold"
+							Margin="10,0,10,0"/>
+					<Button Content="Play Settings"
+							Background="#DCD7C9"
+							Foreground="#2C3639"
+							FontSize="16"
+							Height="32"
+							FontWeight="Bold"
+							Margin="10,0,10,0"/>
+				</StackPanel>
+			</Grid>
+		</Border>
+
+		<ItemsControl x:Name="lst"
+					  Grid.Row="1"
+					  Background="White"		  
+					  Width="{Binding RelativeSource={RelativeSource Self}, Path=ActualHeight}"
+					  Height="Auto"
+					  ItemTemplate="{DynamicResource DataTemplate_Level1}"
+					  Margin="0,40,0,40"/>
+	</Grid>
+	
+
+</Window>
