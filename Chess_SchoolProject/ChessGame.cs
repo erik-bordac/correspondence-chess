@@ -21,11 +21,11 @@ namespace Chess_SchoolProject
 	{
 		string Turn = "W";
 		public List<List<Square>> gameArr;
-		public ItemsControl lst { get; set; }
+		public ItemsControl gridControl { get; set; }
 
 		public ChessGame(ItemsControl list)
 		{
-			lst = list;
+			gridControl = list;
 			
 			gameArr = new List<List<Square>>();
 			
@@ -41,7 +41,7 @@ namespace Chess_SchoolProject
 
 			InitializeFigures();
 
-			lst.ItemsSource = gameArr;
+			gridControl.ItemsSource = gameArr;
 		}
 
 		private void InitializeFigures()

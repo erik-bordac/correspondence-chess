@@ -31,7 +31,7 @@ namespace Chess_SchoolProject
 			InitializeComponent();
 
 			// Initialize chess game
-			Game = new ChessGame(lst);
+			Game = new ChessGame(gridControl);
 		}
 
 		private void Grid_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)

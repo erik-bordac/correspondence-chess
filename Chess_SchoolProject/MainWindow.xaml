@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Chess_SchoolProject"
         mc:Ignorable="d"
         Title="Chess" Height="700" Width="1000"
-		MinWidth="{Binding ElementName=lst, Path=ActualWidth}">
+		MinWidth="{Binding ElementName=gridControl, Path=ActualWidth}">
 
 	<Window.Resources>
 		<local:MathConverter x:Key="MathConverter"/>
@@ -27,9 +27,9 @@
 				<ItemsControl.ItemsPanel>
 					<ItemsPanelTemplate>
 						<UniformGrid Columns="8" Rows="1"
-									 MinWidth="{Binding ElementName=lst, Path=ActualWidth, Converter={StaticResource MathConverter},
+									 MinWidth="{Binding ElementName=gridControl, Path=ActualWidth, Converter={StaticResource MathConverter},
 							ConverterParameter=@VALUE/8}"
-									 MinHeight="{Binding ElementName=lst, Path=ActualWidth, Converter={StaticResource MathConverter},
+									 MinHeight="{Binding ElementName=gridControl, Path=ActualWidth, Converter={StaticResource MathConverter},
 							ConverterParameter=@VALUE/8}"
 									 AllowDrop="True"/>
 					</ItemsPanelTemplate>
@@ -90,7 +90,7 @@
 			</Grid>
 		</Border>
 
-		<ItemsControl x:Name="lst"
+		<ItemsControl x:Name="gridControl"
 					  Grid.Row="1"
 					  Background="White"		  
 					  Width="{Binding RelativeSource={RelativeSource Self}, Path=ActualHeight}"
