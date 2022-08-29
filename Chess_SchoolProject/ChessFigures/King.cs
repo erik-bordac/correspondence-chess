@@ -10,12 +10,14 @@ namespace Chess_SchoolProject.ChessFigures
 {
 	class King : IFigure
 	{
+		public bool HasMoved { get; set; }
 		public string ImgPath { get; set; }
 		public string Color { get; set; }
 
 		public King(string color)
 		{
 			Color = color;
+			HasMoved = false;
 
 			ImgPath = (Color == "W") ? "./Resources/Wking.png" : "./Resources/Bking.png";
 		}
@@ -23,11 +25,8 @@ namespace Chess_SchoolProject.ChessFigures
 		public bool IsValidMove(Square source, Square target, ChessGame game)
 		{
 			// Check for castle
-			if (target.Content is Rook && target.Content.Color == source.Content.Color)
+			if (target.Content is Rook && target.Content.Color == source.Content.Color && !HasMoved && !target.Content.HasMoved)
 			{
-				Rook rook = (Rook)target.Content;
-				if (rook.FirstMove == false) return false;
-
 				// Determine if there are no pieces between king/rook
 				int startPoint = Math.Min(source.File, target.File);
 				int endPoint = Math.Max(source.File, target.File);
@@ -39,8 +38,6 @@ namespace Chess_SchoolProject.ChessFigures
 						return false;
 					}
 				}
-
-
 				return true;
 			}
 

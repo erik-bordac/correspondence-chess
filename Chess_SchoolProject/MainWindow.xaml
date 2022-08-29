@@ -15,7 +15,8 @@
 			<Label Background="{Binding Color}"
 				   Grid.Row="{Binding Row}"
 				   Grid.Column="{Binding File}"
-				   Drop="Grid_Drop">
+				   Drop="Grid_Drop"
+				   MouseRightButtonDown="DEBUG">
 				<Image Source="{Binding Content.ImgPath}" Stretch="Fill"
 					   PreviewMouseLeftButtonDown="Grid_PreviewMouseLeftButtonDown" 
 					   PreviewMouseMove="Grid_MouseMove"/>

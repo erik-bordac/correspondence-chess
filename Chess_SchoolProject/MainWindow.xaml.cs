@@ -16,9 +16,6 @@ using System.Windows.Shapes;
 
 namespace Chess_SchoolProject
 {
-	/// <summary>
-	/// Interaction logic for MainWindow.xaml
-	/// </summary>
 	public partial class MainWindow : Window
 	{
 
@@ -91,6 +88,13 @@ namespace Chess_SchoolProject
 			Square target = (Square)e.Data.GetData("Square");
 
 			Game.Move(target, source);
+		}
+
+		private void DEBUG(object sender, MouseButtonEventArgs e)
+		{
+			Label sourceLabel = sender as Label;
+			Square source = (Square)sourceLabel.DataContext;
+			MessageBox.Show(source.Content.HasMoved.ToString());
 		}
 	}
 }

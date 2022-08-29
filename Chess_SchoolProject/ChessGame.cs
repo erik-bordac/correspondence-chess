@@ -49,9 +49,12 @@ namespace Chess_SchoolProject
 			// black back-rank
 			gameArr[0][4].Content = new King("B");
 			gameArr[0][3].Content = new Queen("B");
-			gameArr[0][0].Content = gameArr[0][7].Content = new Rook("B");
-			gameArr[0][1].Content = gameArr[0][6].Content = new Knight("B");
-			gameArr[0][2].Content = gameArr[0][5].Content = new Bishop("B");
+			gameArr[0][0].Content = new Rook("B");
+			gameArr[0][7].Content = new Rook("B");
+			gameArr[0][1].Content = new Knight("B");
+			gameArr[0][6].Content = new Knight("B");
+			gameArr[0][2].Content = new Bishop("B");
+			gameArr[0][5].Content = new Bishop("B");
 			// black pawns
 			for (int i = 0; i < 8; i++)
 			{
@@ -61,9 +64,12 @@ namespace Chess_SchoolProject
 			// white back-rank
 			gameArr[7][4].Content = new King("W");
 			gameArr[7][3].Content = new Queen("W");
-			gameArr[7][0].Content = gameArr[7][7].Content = new Rook("W");
-			gameArr[7][1].Content = gameArr[7][6].Content = new Knight("W");
-			gameArr[7][2].Content = gameArr[7][5].Content = new Bishop("W");
+			gameArr[7][0].Content = new Rook("W");
+			gameArr[7][7].Content = new Rook("W");
+			gameArr[7][1].Content = new Knight("W");
+			gameArr[7][6].Content = new Knight("W");
+			gameArr[7][2].Content = new Bishop("W");
+			gameArr[7][5].Content = new Bishop("W");
 			// white pawns
 			for (int i = 0; i < 8; i++)
 			{
@@ -80,14 +86,11 @@ namespace Chess_SchoolProject
 
 			if (moveFrom.Content.IsValidMove(moveFrom, moveTo, this))
 			{
-				// Check for revealed check
-
 				// castle movement handling
 				if (moveFrom.Content is King && moveTo.Content is Rook && moveFrom.Content.Color == moveTo.Content.Color)
 				{
-					Rook tmp = (Rook)moveTo.Content;
-					tmp.FirstMove = false;
-
+					moveFrom.Content.HasMoved = true;
+					moveTo.Content.HasMoved = true;
 					if (moveFrom.File < moveTo.File)
 					{
 						gameArr[moveFrom.Row][moveFrom.File + 2].Content = moveFrom.Content;
@@ -103,13 +106,14 @@ namespace Chess_SchoolProject
 					}
 				} else		// non castle movement handling
 				{
+					moveFrom.Content.HasMoved = true;
 					moveTo.Content = moveFrom.Content;
 					moveFrom.Content = null;
 				}
 				// Change player turn
 				if (Turn == "W")
 				{
-					Turn = "B";
+					Turn = "W";
 				} else
 				{
 					Turn = "W";

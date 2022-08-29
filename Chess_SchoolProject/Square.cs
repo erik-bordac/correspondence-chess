@@ -13,17 +13,6 @@ namespace Chess_SchoolProject
 		public int Row { get; private set; }
 		public int File { get; private set; }
 
-		//private string content;
-
-		//public string Content
-		//{
-		//	get { return content; }
-		//	set { 
-		//		content = value;
-		//		OnPropertyChanged();
-		//	}
-		//}
-
 		private IFigure content;
 
 		public IFigure Content

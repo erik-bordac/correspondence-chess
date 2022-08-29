@@ -9,13 +9,14 @@ namespace Chess_SchoolProject.ChessFigures
 {
 	class Pawn : IFigure
 	{
-		private bool FirstMove = true;
+		public bool HasMoved { get; set; }
 		public string ImgPath { get; set; }
 		public string Color { get; set; }
 
 		public Pawn (string color)
 		{
 			Color = color;
+			HasMoved = false;
 
 			ImgPath = (Color == "W") ? "./Resources/Wpawn.png" : "./Resources/Bpawn.png";
 		}
@@ -34,7 +35,7 @@ namespace Chess_SchoolProject.ChessFigures
 			}
 
 
-			if (RowDiff == 2 && FileDiff == 0 && FirstMove && target.Content == null)
+			if (RowDiff == 2 && FileDiff == 0 && !HasMoved && target.Content == null)
 			{
 				//TODO: Implement enpassant
 
@@ -46,14 +47,12 @@ namespace Chess_SchoolProject.ChessFigures
 					return false;
 				}
 
-				FirstMove = false;
 				return true;
 			}
 
 			if (RowDiff == 1 && FileDiff == 0 && target.Content == null ||
 				(target.Content != null && RowDiff == 1 && (FileDiff == 1 || FileDiff == -1) && target.Content.Color != source.Content.Color))	// attacking enemy piece
 			{
-				FirstMove = false;
 				return true;
 			}
 			else return false;

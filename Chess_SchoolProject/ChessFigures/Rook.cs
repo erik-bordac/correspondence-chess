@@ -8,13 +8,14 @@ namespace Chess_SchoolProject.ChessFigures
 {
 	class Rook : IFigure
 	{
-		public bool FirstMove = true;
 		public string ImgPath { get; set; }
 		public string Color { get; set; }
+		public bool HasMoved { get; set; }
 
 		public Rook(string color)
 		{
 			Color = color;
+			HasMoved = false;
 
 			ImgPath = (Color == "W") ? "./Resources/Wrook.png" : "./Resources/Brook.png";
 		}
@@ -37,7 +38,7 @@ namespace Chess_SchoolProject.ChessFigures
 
 					if (row1 && game.gameArr[checkedRow][source.File].Content != null) row1 = false;
 
-					if (checkedRow == target.Row && source.File == target.File) { FirstMove = false; return true; }
+					if (checkedRow == target.Row && source.File == target.File) { return true; }
 				}
 				if (row2)
 				{
@@ -47,7 +48,7 @@ namespace Chess_SchoolProject.ChessFigures
 
 					if (row2 && game.gameArr[checkedRow][source.File].Content != null) row2 = false;
 
-					if (checkedRow == target.Row && source.File == target.File) { FirstMove = false; return true; }
+					if (checkedRow == target.Row && source.File == target.File) { return true; }
 				}
 
 				if (file1)
@@ -58,7 +59,7 @@ namespace Chess_SchoolProject.ChessFigures
 
 					if (file1 && game.gameArr[source.Row][checkedFile].Content != null) file1 = false;
 
-					if (source.Row == target.Row && checkedFile == target.File) { FirstMove = false; return true; }
+					if (source.Row == target.Row && checkedFile == target.File) { return true; }
 				}
 
 				if (file2)
@@ -69,7 +70,7 @@ namespace Chess_SchoolProject.ChessFigures
 
 					if (file2 && game.gameArr[source.Row][checkedFile].Content != null) file2 = false;
 
-					if (source.Row == target.Row && checkedFile == target.File) { FirstMove = false; return true; }
+					if (source.Row == target.Row && checkedFile == target.File) { return true; }
 				}
 			}
 			return false;

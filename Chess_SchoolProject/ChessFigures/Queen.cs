@@ -8,6 +8,7 @@ namespace Chess_SchoolProject.ChessFigures
 {
 	class Queen : IFigure
 	{
+		public bool HasMoved { get; set; }
 		public string ImgPath { get; set; }
 		public string Color { get; set; }
 
