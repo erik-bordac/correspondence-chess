@@ -12,6 +12,7 @@ namespace Chess_SchoolProject
 	{
 		public int Row { get; private set; }
 		public int File { get; private set; }
+		public bool EnPassantFlag { get; set; }
 
 		private IFigure content;
 

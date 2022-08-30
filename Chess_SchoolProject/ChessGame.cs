@@ -19,9 +19,14 @@ namespace Chess_SchoolProject
 
 	class ChessGame
 	{
-		string Turn = "W";
+
 		public List<List<Square>> gameArr;
 		public ItemsControl gridControl { get; set; }
+
+
+		string Turn = "W";
+		Square EnPassantAttackSquare;
+		Square EnPassantRemoveSquare;
 
 		public ChessGame(ItemsControl list)
 		{
@@ -89,8 +94,11 @@ namespace Chess_SchoolProject
 				// castle movement handling
 				if (moveFrom.Content is King && moveTo.Content is Rook && moveFrom.Content.Color == moveTo.Content.Color)
 				{
+					RemoveEnPasssantRefs();
+
 					moveFrom.Content.HasMoved = true;
 					moveTo.Content.HasMoved = true;
+
 					if (moveFrom.File < moveTo.File)
 					{
 						gameArr[moveFrom.Row][moveFrom.File + 2].Content = moveFrom.Content;
@@ -104,16 +112,49 @@ namespace Chess_SchoolProject
 						gameArr[moveFrom.Row][moveTo.File + 3].Content = moveTo.Content;
 						moveTo.Content = null;
 					}
-				} else		// non castle movement handling
+				} 
+				else if (moveFrom.Content is Pawn && Math.Abs(moveFrom.Row - moveTo.Row) == 2)	// en passant move
 				{
+					RemoveEnPasssantRefs();
+
+					if (moveFrom.Content.Color == "W")
+					{
+						EnPassantAttackSquare = gameArr[moveFrom.Row - 1][moveFrom.File];
+					} else
+					{
+						EnPassantAttackSquare = gameArr[moveFrom.Row + 1][moveFrom.File];
+					}
+
+					EnPassantAttackSquare.EnPassantFlag = true;
+					EnPassantRemoveSquare = moveTo;
+					
 					moveFrom.Content.HasMoved = true;
 					moveTo.Content = moveFrom.Content;
 					moveFrom.Content = null;
+
 				}
+				else if (moveFrom.Content is Pawn && moveTo == EnPassantAttackSquare)	// en passant attack
+				{
+					EnPassantAttackSquare.Content = moveFrom.Content;
+					moveFrom.Content = null;
+					EnPassantRemoveSquare.Content = null;
+
+					RemoveEnPasssantRefs();
+				}
+				else		// default move behaviour
+				{
+					RemoveEnPasssantRefs();
+
+					moveFrom.Content.HasMoved = true;
+					moveTo.Content = moveFrom.Content;
+					moveFrom.Content = null;
+
+				}
+
 				// Change player turn
 				if (Turn == "W")
 				{
-					Turn = "W";
+					Turn = "B";
 				} else
 				{
 					Turn = "W";
@@ -121,6 +162,16 @@ namespace Chess_SchoolProject
 				return;
 			}
 
+		}
+
+		private void RemoveEnPasssantRefs()
+		{
+			if (EnPassantRemoveSquare != null)
+			{
+				EnPassantAttackSquare.EnPassantFlag = false;
+			}
+			EnPassantAttackSquare = null;
+			EnPassantRemoveSquare = null;
 		}
 	}
 }

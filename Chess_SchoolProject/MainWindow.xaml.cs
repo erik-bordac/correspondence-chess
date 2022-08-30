@@ -94,7 +94,7 @@ namespace Chess_SchoolProject
 		{
 			Label sourceLabel = sender as Label;
 			Square source = (Square)sourceLabel.DataContext;
-			MessageBox.Show(source.Content.HasMoved.ToString());
+			MessageBox.Show(source.EnPassantFlag.ToString());
 		}
 	}
 }

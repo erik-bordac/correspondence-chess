@@ -33,12 +33,14 @@ namespace Chess_SchoolProject.ChessFigures
 			{
 				RowDiff = -RowDiff;
 			}
-
+			// attacking EnPassant square
+			if (RowDiff == 1 && Math.Abs(FileDiff) == 1 && target.EnPassantFlag == true)
+			{
+				return true;
+			}
 
 			if (RowDiff == 2 && FileDiff == 0 && !HasMoved && target.Content == null)
 			{
-				//TODO: Implement enpassant
-
 				//piece in front of pawn
 				int rowVector = Color == "B" ? 1 : -1;
 
