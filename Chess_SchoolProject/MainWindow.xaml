@@ -16,10 +16,14 @@
 				   Grid.Row="{Binding Row}"
 				   Grid.Column="{Binding File}"
 				   Drop="Grid_Drop"
+				   PreviewDragEnter="Grid_Enter"
+				   PreviewDragLeave="Grid_Leave"
 				   MouseRightButtonDown="DEBUG">
 				<Image Source="{Binding Content.ImgPath}" Stretch="Fill"
-					   PreviewMouseLeftButtonDown="Grid_PreviewMouseLeftButtonDown" 
-					   PreviewMouseMove="Grid_MouseMove"/>
+					   MouseEnter="Img_MouseEnter"
+					   MouseLeave="Img_MouseLeave"
+					   PreviewMouseLeftButtonDown="Img_PreviewMouseLeftButtonDown" 
+					   PreviewMouseMove="Img_MouseMove"/>
 			</Label>
 		</DataTemplate>
 		
