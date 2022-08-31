@@ -1,17 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
-using System.Windows.Data;
-using System.Windows.Media;
-using static System.Net.Mime.MediaTypeNames;
-using System.Windows.Media.Imaging;
 using Chess_SchoolProject.ChessFigures;
 
 namespace Chess_SchoolProject
