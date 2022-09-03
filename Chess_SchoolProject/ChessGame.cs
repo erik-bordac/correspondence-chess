@@ -17,6 +17,9 @@ namespace Chess_SchoolProject
 		Square EnPassantAttackSquare;
 		Square EnPassantRemoveSquare;
 
+		Square Wking;
+		Square Bking;
+
 		public ChessGame(ItemsControl list)
 		{
 			gridControl = list;
@@ -80,65 +83,9 @@ namespace Chess_SchoolProject
 
 			if (moveFrom.Content.IsValidMove(moveFrom, moveTo, this))
 			{
-				// castle movement handling
-				if (moveFrom.Content is King && moveTo.Content is Rook && moveFrom.Content.Color == moveTo.Content.Color)
-				{
-					RemoveEnPasssantRefs();
-
-					moveFrom.Content.HasMoved = true;
-					moveTo.Content.HasMoved = true;
-
-					if (moveFrom.File < moveTo.File)
-					{
-						gameArr[moveFrom.Row][moveFrom.File + 2].Content = moveFrom.Content;
-						moveFrom.Content = null;
-						gameArr[moveFrom.Row][moveTo.File - 2].Content = moveTo.Content;
-						moveTo.Content = null;
-					} else
-					{
-						gameArr[moveFrom.Row][moveFrom.File - 2].Content = moveFrom.Content;
-						moveFrom.Content = null;
-						gameArr[moveFrom.Row][moveTo.File + 3].Content = moveTo.Content;
-						moveTo.Content = null;
-					}
-				} 
-				else if (moveFrom.Content is Pawn && Math.Abs(moveFrom.Row - moveTo.Row) == 2)	// en passant move
-				{
-					RemoveEnPasssantRefs();
-
-					if (moveFrom.Content.Color == "W")
-					{
-						EnPassantAttackSquare = gameArr[moveFrom.Row - 1][moveFrom.File];
-					} else
-					{
-						EnPassantAttackSquare = gameArr[moveFrom.Row + 1][moveFrom.File];
-					}
-
-					EnPassantAttackSquare.EnPassantFlag = true;
-					EnPassantRemoveSquare = moveTo;
-					
-					moveFrom.Content.HasMoved = true;
-					moveTo.Content = moveFrom.Content;
-					moveFrom.Content = null;
-
-				}
-				else if (moveFrom.Content is Pawn && moveTo == EnPassantAttackSquare)	// en passant attack
-				{
-					EnPassantAttackSquare.Content = moveFrom.Content;
-					moveFrom.Content = null;
-					EnPassantRemoveSquare.Content = null;
-
-					RemoveEnPasssantRefs();
-				}
-				else		// default move behaviour
-				{
-					RemoveEnPasssantRefs();
-
-					moveFrom.Content.HasMoved = true;
-					moveTo.Content = moveFrom.Content;
-					moveFrom.Content = null;
-
-				}
+				if (moveFrom.Content is King) MoveKing(moveFrom, moveTo);
+				else if (moveFrom.Content is Pawn) MovePawn(moveFrom, moveTo);
+				else MovePiece(moveFrom, moveTo);
 
 				// Change player turn
 				if (Turn == "W")
@@ -151,6 +98,80 @@ namespace Chess_SchoolProject
 				return;
 			}
 
+		}
+		private void MoveKing(Square moveFrom, Square moveTo)
+		{
+			// castle movement handling
+			if (moveFrom.Content is King && moveTo.Content is Rook && moveFrom.Content.Color == moveTo.Content.Color)
+			{
+				RemoveEnPasssantRefs();
+
+				moveFrom.Content.HasMoved = true;
+				moveTo.Content.HasMoved = true;
+
+				if (moveFrom.File < moveTo.File)
+				{
+					gameArr[moveFrom.Row][moveFrom.File + 2].Content = moveFrom.Content;
+					moveFrom.Content = null;
+					gameArr[moveFrom.Row][moveTo.File - 2].Content = moveTo.Content;
+					moveTo.Content = null;
+				}
+				else
+				{
+					gameArr[moveFrom.Row][moveFrom.File - 2].Content = moveFrom.Content;
+					moveFrom.Content = null;
+					gameArr[moveFrom.Row][moveTo.File + 3].Content = moveTo.Content;
+					moveTo.Content = null;
+				}
+			} else
+			{
+				MovePiece(moveFrom, moveTo);
+			}
+
+
+		}
+
+		private void MovePawn(Square moveFrom, Square moveTo)
+		{
+			if (Math.Abs(moveFrom.Row - moveTo.Row) == 2)  // en passant move
+			{
+				RemoveEnPasssantRefs();
+
+				if (moveFrom.Content.Color == "W")
+				{
+					EnPassantAttackSquare = gameArr[moveFrom.Row - 1][moveFrom.File];
+				}
+				else
+				{
+					EnPassantAttackSquare = gameArr[moveFrom.Row + 1][moveFrom.File];
+				}
+
+				EnPassantAttackSquare.EnPassantFlag = true;
+				EnPassantRemoveSquare = moveTo;
+
+				moveFrom.Content.HasMoved = true;
+				moveTo.Content = moveFrom.Content;
+				moveFrom.Content = null;
+
+			}
+			else if (moveFrom.Content is Pawn && moveTo == EnPassantAttackSquare)   // en passant attack
+			{
+				EnPassantAttackSquare.Content = moveFrom.Content;
+				moveFrom.Content = null;
+				EnPassantRemoveSquare.Content = null;
+
+				RemoveEnPasssantRefs();
+			}
+			else MovePiece(moveFrom, moveTo);
+		}
+
+		private void MovePiece(Square moveFrom, Square moveTo)
+		{
+			RemoveEnPasssantRefs();
+
+			moveFrom.Content.HasMoved = true;
+			moveTo.Content = moveFrom.Content;
+			moveFrom.Content = null;
 		}
 
 		private void RemoveEnPasssantRefs()
