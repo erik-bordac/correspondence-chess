@@ -102,7 +102,10 @@ namespace Chess_SchoolProject
 		private void MoveKing(Square moveFrom, Square moveTo)
 		{
 			// castle movement handling
-			if (moveFrom.Content is King && moveTo.Content is Rook && moveFrom.Content.Color == moveTo.Content.Color)
+			if (moveTo.Content is Rook &&
+				moveFrom.Content.Color == moveTo.Content.Color &&
+				!moveTo.Content.HasMoved &&
+				!moveFrom.Content.HasMoved)
 			{
 				RemoveEnPasssantRefs();
 
@@ -154,7 +157,7 @@ namespace Chess_SchoolProject
 				moveFrom.Content = null;
 
 			}
-			else if (moveFrom.Content is Pawn && moveTo == EnPassantAttackSquare)   // en passant attack
+			else if (moveTo == EnPassantAttackSquare)   // en passant attack
 			{
 				EnPassantAttackSquare.Content = moveFrom.Content;
 				moveFrom.Content = null;

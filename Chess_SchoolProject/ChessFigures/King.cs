@@ -24,8 +24,12 @@ namespace Chess_SchoolProject.ChessFigures
 
 		public bool IsValidMove(Square source, Square target, ChessGame game)
 		{
+
 			// Check for castle
-			if (target.Content is Rook && target.Content.Color == source.Content.Color && !HasMoved && !target.Content.HasMoved)
+			if (target.Content is Rook &&
+				target.Content.Color == Color &&
+				!HasMoved &&
+				!target.Content.HasMoved)
 			{
 				// Determine if there are no pieces between king/rook
 				int startPoint = Math.Min(source.File, target.File);
@@ -41,6 +45,9 @@ namespace Chess_SchoolProject.ChessFigures
 				return true;
 			}
 
+			if (target.Content != null &&
+				source.Content.Color == target.Content.Color) return false;
+
 			if (Math.Abs(source.Row - target.Row) <= 1 && Math.Abs(source.File - target.File) <= 1)
 			{
 				return true;
@@ -50,17 +57,15 @@ namespace Chess_SchoolProject.ChessFigures
 
 		public bool IsInCheck(Square source, ChessGame game)
 		{
-			bool result;
-
-			result = IsAttackedOnDiagonal(source, game);
-			result = IsAttackedByKnight(source, game);
-			result = IsAttackedOnRow(source, game);		// Rook and Queen
-			
-			return true;
+			return IsAttackedByKnight(source, game) || 
+				IsAttackedOnDiagonal(source, game) ||		// bishop and queen
+				IsAttackedOnRow(source, game);				// rook and queen
 		}
 
 		private bool IsAttackedOnDiagonal(Square source, ChessGame game)
 		{
+
+
 			return false;
 		}
 

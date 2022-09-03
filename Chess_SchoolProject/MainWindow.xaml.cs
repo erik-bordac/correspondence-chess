@@ -83,7 +83,7 @@ namespace Chess_SchoolProject
 		{
 			Label sourceLabel = sender as Label;
 			Square source = (Square)sourceLabel.DataContext;
-			MessageBox.Show(source.EnPassantFlag.ToString());
+			MessageBox.Show(source.Content.HasMoved.ToString());
 		}
 
 		private void Grid_Enter(object sender, DragEventArgs e)
