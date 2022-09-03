@@ -47,5 +47,51 @@ namespace Chess_SchoolProject.ChessFigures
 			}
 			else return false;
 		}
+
+		public bool IsInCheck(Square source, ChessGame game)
+		{
+			bool result;
+
+			result = IsAttackedOnDiagonal(source, game);
+			result = IsAttackedByKnight(source, game);
+			result = IsAttackedOnRow(source, game);		// Rook and Queen
+			
+			return true;
+		}
+
+		private bool IsAttackedOnDiagonal(Square source, ChessGame game)
+		{
+			return false;
+		}
+
+		private bool IsAttackedByKnight(Square source, ChessGame game)
+		{
+			return false;
+		}
+
+		private bool IsAttackedOnRow(Square source, ChessGame game)
+		{
+			for(int i = 0; i<8; i++)
+			{
+				try
+				{
+					if (game.gameArr[source.Row][source.File - i].Content.Color == Color) break;
+					else	// if Content is empty then NulLReferenceException is raised
+					{
+						if (game.gameArr[source.Row][source.File - i].Content is Rook ||
+							game.gameArr[source.Row][source.File - i].Content is Queen)
+						{ 
+							MessageBox.Show("Check");
+							return true;
+						}
+						else break;
+					}
+				}
+				catch (NullReferenceException) { }
+				catch (IndexOutOfRangeException) { break; }
+			}
+
+			return false;
+		}
 	}
 }
