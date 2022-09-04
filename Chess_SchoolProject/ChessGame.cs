@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using Chess_SchoolProject.ChessFigures;
 
 namespace Chess_SchoolProject
@@ -100,7 +101,8 @@ namespace Chess_SchoolProject
 					{
 						MessageBox.Show("BCheck");
 					}
-				} else
+				}
+				else
 				{
 					if(wk.IsInCheck(Wking, this))
 					{

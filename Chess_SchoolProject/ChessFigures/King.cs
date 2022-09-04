@@ -64,9 +64,132 @@ namespace Chess_SchoolProject.ChessFigures
 
 		private bool IsAttackedOnDiagonal(Square source, ChessGame game)
 		{
+			// pawn check
+			try
+			{
+				if (Color == "W")
+				{	
+
+					Square target1 = game.gameArr[source.Row - 1][source.File - 1];
+					Square target2 = game.gameArr[source.Row - 1][source.File + 1];
+					if (target1.Content != null && target1.Content.Color != Color && target1.Content is Pawn)
+					{
+						return true;
+					}
+					if (target2.Content != null && target2.Content.Color != Color && target2.Content is Pawn)
+					{
+						return true;
+					}
+				} else
+				{
+					Square target1 = game.gameArr[source.Row + 1][source.File - 1];
+					Square target2 = game.gameArr[source.Row + 1][source.File + 1];
+					if (target1.Content != null && target1.Content.Color != Color && target1.Content is Pawn)
+					{
+						return true;
+					}
+					if (target2.Content != null && target2.Content.Color != Color && target2.Content is Pawn)
+					{
+						return true;
+					}
+				}
+			} catch (ArgumentOutOfRangeException) { }
+			
+			// upleft
+			for (int i = 1; i < 8; i++)
+			{
+				try
+				{
+					Square targetSquare = game.gameArr[source.Row - i][source.File - i];
+
+					if (targetSquare.Content == null) continue;
+
+					if (targetSquare.Content.Color == Color) break;
+					else
+					{
+						if (targetSquare.Content is Bishop ||
+							targetSquare.Content is Queen)
+						{
+							return true;
+						}
+						else break;
+					}
+				}
+				catch (ArgumentOutOfRangeException) { break; }
+			}
+
+			// upright
+			for (int i = 1; i < 8; i++)
+			{
+				try
+				{
+					Square targetSquare = game.gameArr[source.Row - i][source.File + i];
+
+					if (targetSquare.Content == null) continue;
+
+					if (targetSquare.Content.Color == Color) break;
+					else
+					{
+						if (targetSquare.Content is Bishop ||
+							targetSquare.Content is Queen)
+						{
+							return true;
+						}
+						else break;
+					}
+				}
+				catch (ArgumentOutOfRangeException) { break; }
+			}
+
+			// downleft
+			for (int i = 1; i < 8; i++)
+			{
+				try
+				{
+					Square targetSquare = game.gameArr[source.Row + i][source.File - i];
+
+					if (targetSquare.Content == null) continue;
+
+					if (targetSquare.Content.Color == Color) break;
+					else
+					{
+						if (targetSquare.Content is Bishop ||
+							targetSquare.Content is Queen)
+						{
+							return true;
+						}
+						else break;
+					}
+				}
+				catch (ArgumentOutOfRangeException) { break; }
+			}
+
+			// downright
+			for (int i = 1; i < 8; i++)
+			{
+				try
+				{
+					Square targetSquare = game.gameArr[source.Row + i][source.File + i];
+
+					if (targetSquare.Content == null) continue;
+
+					if (targetSquare.Content.Color == Color) break;
+					else
+					{
+						if (targetSquare.Content is Bishop ||
+							targetSquare.Content is Queen)
+						{
+							return true;
+						}
+						else break;
+					}
+				}
+				catch (ArgumentOutOfRangeException) { break; }
+			}
+
 			return false;
 		}
-
+	
 		private bool IsAttackedByKnight(Square source, ChessGame game)
 		{
 			(int, int)[] moves = { (2, 1), (2, -1), (-2, 1), (-2, -1), (1, 2), (1, -2), (-1, 2), (-1, -2) };
