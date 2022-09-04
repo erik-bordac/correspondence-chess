@@ -64,36 +64,120 @@ namespace Chess_SchoolProject.ChessFigures
 
 		private bool IsAttackedOnDiagonal(Square source, ChessGame game)
 		{
-
-
 			return false;
 		}
 
 		private bool IsAttackedByKnight(Square source, ChessGame game)
 		{
+			(int, int)[] moves = { (2, 1), (2, -1), (-2, 1), (-2, -1), (1, 2), (1, -2), (-1, 2), (-1, -2) };
+
+			foreach ((int, int)move in moves)
+			{
+				try
+				{
+					if (game.gameArr[source.Row + move.Item1][source.File + move.Item2].Content is Knight &&
+						game.gameArr[source.Row + move.Item1][source.File + move.Item2].Content.Color != Color)
+					{
+						return true;
+					}
+				} catch (ArgumentOutOfRangeException) { continue; }
+
+			}
 			return false;
 		}
 
 		private bool IsAttackedOnRow(Square source, ChessGame game)
 		{
-			for(int i = 0; i<8; i++)
+			// rowleft
+			for(int i = 1; i<8; i++)
 			{
 				try
 				{
-					if (game.gameArr[source.Row][source.File - i].Content.Color == Color) break;
-					else	// if Content is empty then NulLReferenceException is raised
+					Square targetSquare = game.gameArr[source.Row][source.File - i];
+
+					if (targetSquare.Content == null) continue;
+
+					if (targetSquare.Content.Color == Color) break;
+					else
 					{
-						if (game.gameArr[source.Row][source.File - i].Content is Rook ||
-							game.gameArr[source.Row][source.File - i].Content is Queen)
+						if (targetSquare.Content is Rook ||
+							targetSquare.Content is Queen)
 						{ 
-							MessageBox.Show("Check");
 							return true;
 						}
 						else break;
 					}
 				}
-				catch (NullReferenceException) { }
-				catch (IndexOutOfRangeException) { break; }
+				catch (ArgumentOutOfRangeException) { break; }
+			}
+
+			// rowright
+			for (int i = 1; i < 8; i++)
+			{
+				try
+				{
+					Square targetSquare = game.gameArr[source.Row][source.File + i];
+
+					if (targetSquare.Content == null) continue;
+
+					if (targetSquare.Content.Color == Color) break;
+					else
+					{
+						if (targetSquare.Content is Rook ||
+							targetSquare.Content is Queen)
+						{
+							return true;
+						}
+						else break;
+					}
+				}
+				catch (ArgumentOutOfRangeException) { break; }
+			}
+
+			// columnup
+			for (int i = 1; i<8; i++)
+			{
+				try
+				{
+					Square targetSquare = game.gameArr[source.Row - i][source.File];
+
+					if (targetSquare.Content == null) continue;
+
+					if (targetSquare.Content.Color == Color) break;
+					else
+					{
+						if (targetSquare.Content is Rook ||
+							targetSquare.Content is Queen)
+						{ 
+							return true;
+						}
+						else break;
+					}
+				}
+				catch (ArgumentOutOfRangeException) { break; }
+			}
+
+			// columndown
+			for (int i = 1; i<8; i++)
+			{
+				try
+				{
+					Square targetSquare = game.gameArr[source.Row + i][source.File];
+
+					if (targetSquare.Content == null) continue;
+
+					if (targetSquare.Content.Color == Color) break;
+					else
+					{
+						if (targetSquare.Content is Rook ||
+							targetSquare.Content is Queen)
+						{ 
+							return true;
+						}
+						else break;
+					}
+				}
+				catch (ArgumentOutOfRangeException) { break; }
 			}
 
 			return false;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows;
 using System.Windows.Controls;
 using Chess_SchoolProject.ChessFigures;
 
@@ -17,8 +18,8 @@ namespace Chess_SchoolProject
 		Square EnPassantAttackSquare;
 		Square EnPassantRemoveSquare;
 
-		Square Wking;
-		Square Bking;
+		public Square Wking;
+		public Square Bking;
 
 		public ChessGame(ItemsControl list)
 		{
@@ -45,6 +46,7 @@ namespace Chess_SchoolProject
 		{
 			// black back-rank
 			gameArr[0][4].Content = new King("B");
+			Bking = gameArr[0][4];
 			gameArr[0][3].Content = new Queen("B");
 			gameArr[0][0].Content = new Rook("B");
 			gameArr[0][7].Content = new Rook("B");
@@ -60,6 +62,7 @@ namespace Chess_SchoolProject
 
 			// white back-rank
 			gameArr[7][4].Content = new King("W");
+			Wking = gameArr[7][4];
 			gameArr[7][3].Content = new Queen("W");
 			gameArr[7][0].Content = new Rook("W");
 			gameArr[7][7].Content = new Rook("W");
@@ -83,9 +86,28 @@ namespace Chess_SchoolProject
 
 			if (moveFrom.Content.IsValidMove(moveFrom, moveTo, this))
 			{
+
 				if (moveFrom.Content is King) MoveKing(moveFrom, moveTo);
 				else if (moveFrom.Content is Pawn) MovePawn(moveFrom, moveTo);
 				else MovePiece(moveFrom, moveTo);
+
+				King wk = Wking.Content as King;
+				King bk = Bking.Content as King;
+
+				if (Turn == "W")
+				{
+					if (bk.IsInCheck(Bking, this))
+					{
+						MessageBox.Show("BCheck");
+					}
+				} else
+				{
+					if(wk.IsInCheck(Wking, this))
+					{
+						MessageBox.Show("WCheck");
+					}
+				}
+
 
 				// Change player turn
 				if (Turn == "W")
@@ -114,6 +136,10 @@ namespace Chess_SchoolProject
 
 				if (moveFrom.File < moveTo.File)
 				{
+					// update king refference
+					if (moveFrom.Content.Color == "W") { Wking = gameArr[moveFrom.Row][moveTo.File + 2]; } 
+					else { Bking = gameArr[moveFrom.Row][moveTo.File + 2]; }
+
 					gameArr[moveFrom.Row][moveFrom.File + 2].Content = moveFrom.Content;
 					moveFrom.Content = null;
 					gameArr[moveFrom.Row][moveTo.File - 2].Content = moveTo.Content;
@@ -121,6 +147,10 @@ namespace Chess_SchoolProject
 				}
 				else
 				{
+					// update king refference
+					if (moveFrom.Content.Color == "W") { Wking = gameArr[moveFrom.Row][moveTo.File - 2]; } 
+					else { Bking = gameArr[moveFrom.Row][moveTo.File - 2]; }
+
 					gameArr[moveFrom.Row][moveFrom.File - 2].Content = moveFrom.Content;
 					moveFrom.Content = null;
 					gameArr[moveFrom.Row][moveTo.File + 3].Content = moveTo.Content;
@@ -128,6 +158,17 @@ namespace Chess_SchoolProject
 				}
 			} else
 			{
+				// update king refference
+				{
+					if (moveFrom.Content.Color == "W")
+					{
+						Wking = moveTo;
+					} else
+					{
+						Bking = moveTo;
+					}
+				}
+
 				MovePiece(moveFrom, moveTo);
 			}
 
