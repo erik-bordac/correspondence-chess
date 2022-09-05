@@ -80,6 +80,8 @@ namespace Chess_SchoolProject
 
 		public void Move(Square moveFrom, Square moveTo)
 		{
+			MessageBox.Show(getFen());
+
 			if (moveFrom == moveTo) return;
 
 			// Check players turn
@@ -143,6 +145,70 @@ namespace Chess_SchoolProject
 			}
 
 		}
+
+		public string getFen()
+		{
+			string fen = "";
+			for (int i = 0; i < 8 ; i++)
+			{
+				for(int j = 0; j < 8; j++)
+				{
+
+					if (gameArr[i][j].Content == null)
+					{
+						char[] chararr = fen.ToCharArray();
+						if (Char.IsNumber(chararr[fen.Length - 1]))
+						{
+							int n = int.Parse(chararr[fen.Length - 1].ToString());
+							n++;
+							chararr[fen.Length - 1] = Char.Parse(n.ToString());
+							fen = new string(chararr);
+						} else
+						{
+							fen += "1";
+						}
+
+						continue;
+					}
+
+					IFigure content = gameArr[i][j].Content;
+					switch (content.GetType().Name.ToString())
+					{
+						case "Rook":
+							fen += content.Color == "W" ? "R" : "r";
+							break;
+						case "Knight":
+							fen += content.Color == "W" ? "N" : "n";
+							break;
+						case "Bishop":
+							fen += content.Color == "W" ? "B" : "b";
+							break;
+						case "Queen":
+							fen += content.Color == "W" ? "Q" : "q";
+							break;
+						case "King":
+							fen += content.Color == "W" ? "K" : "k";
+							break;
+						case "Pawn":
+							fen += content.Color == "W" ? "P" : "p";
+							break;
+					}
+				}
+				if (i != 7) fen += "/";
+			}
+
+			fen += " " + Turn.ToLower() + " "; // player move
+
+			fen += "- ";  // castling rights
+
+			fen += "- ";     // enpassant square
+
+			fen += "0 0";
+
+
+			return fen;
+		}
+
 		private void UndoMove(Square moveFrom, IFigure moveFromContent, bool moveFromHasMoved,
 							  Square moveTo, IFigure moveToContent, bool moveToHasMoved)
 		{
@@ -262,5 +328,6 @@ namespace Chess_SchoolProject
 			EnPassantAttackSquare = null;
 			EnPassantRemoveSquare = null;
 		}
+
 	}
 }

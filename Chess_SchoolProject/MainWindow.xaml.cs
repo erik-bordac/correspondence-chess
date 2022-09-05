@@ -84,7 +84,7 @@ namespace Chess_SchoolProject
 			Label sourceLabel = sender as Label;
 			Square source = (Square)sourceLabel.DataContext;
 
-			MessageBox.Show(Game.Wking.Row.ToString() + " " + Game.Wking.File.ToString());
+			MessageBox.Show(Game.gameArr[0][0].Content.GetType().Name.ToString());
 		}
 
 		private void Grid_Enter(object sender, DragEventArgs e)
