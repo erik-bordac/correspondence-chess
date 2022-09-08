@@ -152,15 +152,19 @@ namespace Chess_SchoolProject
 				
 				if (checkmate) 
 				{ 
+					MessageBox.Show("Player " + Turn + " Won");
 					InitializeFigures(); 
-					gridControl.ItemsSource = gameArr;
-					MessageBox.Show("hi");
 					return; 
 				}
 
 				ChangeTurn();
 				return;
 			}
+
+		}
+		
+		public void loadFen()
+		{
 
 		}
 
@@ -217,12 +221,23 @@ namespace Chess_SchoolProject
 
 			fen += " " + Turn.ToLower() + " "; // player move
 
-			fen += "- ";  // castling rights
+			fen += "- ";  // castling rights, TODO !!!
 
-			fen += "- ";     // enpassant square
+			// enpassant square
+			if (EnPassantAttackSquare != null)
+			{
+				char row = (char)((int)'a' + EnPassantAttackSquare.File);
+				string r = row.ToString();
+				fen += r + (Math.Abs(EnPassantAttackSquare.Row-8)).ToString() + " ";
+			} else
+			{
+				fen += "- ";
+			}
 
 			fen += "0 0";
 
+
+			MessageBox.Show(fen);
 			return fen;
 		}
 
@@ -364,7 +379,6 @@ namespace Chess_SchoolProject
 				using (StreamReader reader = process.StandardOutput)
 				{
 					string result = reader.ReadToEnd();
-					MessageBox.Show(result);
 					if (result.Contains("True"))
 					{
 						return true;
