@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -7,7 +9,6 @@ using Chess_SchoolProject.ChessFigures;
 
 namespace Chess_SchoolProject
 {
-
 	class ChessGame
 	{
 
@@ -45,6 +46,18 @@ namespace Chess_SchoolProject
 
 		private void InitializeFigures()
 		{
+			// Starting player
+			Turn = "W";
+			
+			// Clear board
+			for (int i = 0; i<8; i++)
+			{
+				for (int j = 0; j<8; j++)
+				{
+					gameArr[i][j].Content = null;
+				}
+			}
+
 			// black back-rank
 			gameArr[0][4].Content = new King("B");
 			Bking = gameArr[0][4];
@@ -107,6 +120,7 @@ namespace Chess_SchoolProject
 				King wk = Wking.Content as King;
 				King bk = Bking.Content as King;
 
+				bool checkmate = false;
 				if (Turn == "W")
 				{
 					if (wk.IsInCheck(Wking, this))
@@ -116,7 +130,9 @@ namespace Chess_SchoolProject
 					}
 					if (bk.IsInCheck(Bking, this))
 					{
-						MessageBox.Show("BCheck");
+						ChangeTurn();
+						checkmate = run_cmd("..\\..\\checkmate.py", getFen());
+						ChangeTurn();
 					}
 				}
 				else
@@ -128,19 +144,21 @@ namespace Chess_SchoolProject
 					}
 					if (wk.IsInCheck(Wking, this))
 					{
-						MessageBox.Show("BCheck");
+						ChangeTurn();
+						checkmate = run_cmd("..\\..\\checkmate.py", getFen());
+						ChangeTurn();
 					}
 				}
-
-
-				// Change player turn
-				if (Turn == "W")
-				{
-					Turn = "B";
-				} else
-				{
-					Turn = "W";
+				
+				if (checkmate) 
+				{ 
+					InitializeFigures(); 
+					gridControl.ItemsSource = gameArr;
+					MessageBox.Show("hi");
+					return; 
 				}
+
+				ChangeTurn();
 				return;
 			}
 
@@ -204,7 +222,6 @@ namespace Chess_SchoolProject
 			fen += "- ";     // enpassant square
 
 			fen += "0 0";
-
 
 			return fen;
 		}
@@ -329,5 +346,32 @@ namespace Chess_SchoolProject
 			EnPassantRemoveSquare = null;
 		}
 
+		private void ChangeTurn()
+		{
+			if (Turn == "W") Turn = "B";
+			else Turn = "W";
+		}
+
+		private bool run_cmd(string cmd, string args)
+		{
+			ProcessStartInfo start = new ProcessStartInfo();
+			start.FileName = "C:\\Users\\erikb\\AppData\\Local\\Microsoft\\WindowsApps\\python.exe";
+			start.Arguments = string.Format("{0} \"{1}\"", cmd, args);
+			start.UseShellExecute = false;
+			start.RedirectStandardOutput = true;
+			using (Process process = Process.Start(start))
+			{
+				using (StreamReader reader = process.StandardOutput)
+				{
+					string result = reader.ReadToEnd();
+					MessageBox.Show(result);
+					if (result.Contains("True"))
+					{
+						return true;
+					}
+					return false;
+				}
+			}
+		}
 	}
 }
