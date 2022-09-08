@@ -80,13 +80,13 @@ namespace Chess_SchoolProject
 
 		public void Move(Square moveFrom, Square moveTo)
 		{
-			MessageBox.Show(getFen());
+			//MessageBox.Show(getFen());
 
 			if (moveFrom == moveTo) return;
 
 			// Check players turn
 			if (moveFrom.Content.Color != Turn) return;
-
+			
 			if (moveFrom.Content.IsValidMove(moveFrom, moveTo, this))
 			{
 				// copy

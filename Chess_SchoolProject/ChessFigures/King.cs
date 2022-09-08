@@ -35,11 +35,22 @@ namespace Chess_SchoolProject.ChessFigures
 				int startPoint = Math.Min(source.File, target.File);
 				int endPoint = Math.Max(source.File, target.File);
 
+
+				King k = source.Content as King;
 				for (int i = startPoint + 1; i < endPoint; i++)
 				{
 					if (game.gameArr[source.Row][i].Content != null)
 					{
 						return false;
+					} else
+					{
+						game.gameArr[source.Row][i].Content = k;
+						if (k.IsInCheck(game.gameArr[source.Row][i], game))
+						{
+							game.gameArr[source.Row][i].Content = null;
+							return false;
+						}
+						else game.gameArr[source.Row][i].Content = null;
 					}
 				}
 				return true;
