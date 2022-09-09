@@ -106,13 +106,22 @@
 				<StackPanel Orientation="Horizontal"
 							HorizontalAlignment="Right"
 							Grid.Column="2">
+					<TextBox x:Name="fenInput"
+							 Width="200"
+							 Height="32"
+							 Background="#FF3F4E4F"
+							 Foreground="White"
+							 FontSize="16"
+							 TextAlignment="Center"
+							 VerticalContentAlignment="Center"/>
 					<Button Content="Load FEN"
 							Background="#DCD7C9"
 							Foreground="#2C3639"
 							FontSize="16"
 							Height="32"
 							FontWeight="Bold"
-							Margin="10,0,10,0"/>
+							Margin="10,0,10,0"
+							Click="LoadFen_Clicked"/>
 				</StackPanel>
 			</Grid>
 		</Border>

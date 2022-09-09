@@ -136,5 +136,13 @@ namespace Chess_SchoolProject
 				Game.PieceToPromote = rb.Name.ToString();
 			}
 		}
+
+		private void LoadFen_Clicked(object sender, RoutedEventArgs e)
+		{
+			if (fenInput.Text != "")
+			{
+				Game.loadFen(fenInput.Text);
+			}
+		}
 	}
 }

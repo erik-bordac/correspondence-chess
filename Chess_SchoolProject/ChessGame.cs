@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -48,15 +49,8 @@ namespace Chess_SchoolProject
 		{
 			// Starting player
 			Turn = "W";
-			
-			// Clear board
-			for (int i = 0; i<8; i++)
-			{
-				for (int j = 0; j<8; j++)
-				{
-					gameArr[i][j].Content = null;
-				}
-			}
+
+			ClearBoard();
 
 			// black back-rank
 			gameArr[0][4].Content = new King("B");
@@ -163,9 +157,112 @@ namespace Chess_SchoolProject
 
 		}
 		
-		public void loadFen()
+		public void loadFen(string fen)
 		{
+			// clear board
+			ClearBoard();
 
+			string[] stringarr = fen.Split(' ');
+
+			// Turn
+			Turn = stringarr[1].Contains("b") ? "B" : "W";
+
+			// Place pieces
+			int row = 0;
+			int file = 0;
+			foreach (char ch in stringarr[0].ToCharArray())
+			{
+				switch (ch)
+				{
+					case '/':
+						row++;
+						file = 0;
+						break;
+					case 'r':
+					case 'R':
+						gameArr[row][file].Content = new Rook(char.IsUpper(ch) ? "W" : "B");
+						break;
+					case 'n':
+					case 'N':
+						gameArr[row][file].Content = new Knight(char.IsUpper(ch) ? "W" : "B");
+						break;
+					case 'b':
+					case 'B':
+						gameArr[row][file].Content = new Bishop(char.IsUpper(ch) ? "W" : "B");
+						break;
+					case 'k':
+					case 'K':
+						gameArr[row][file].Content = new King(char.IsUpper(ch) ? "W" : "B");
+						if (char.IsUpper(ch))
+						{
+							Wking = gameArr[row][file];
+						} else
+						{
+							Bking = gameArr[row][file];
+						}
+						break;
+					case 'p':
+					case 'P':
+						gameArr[row][file].Content = new Pawn(char.IsUpper(ch) ? "W" : "B");
+						break;
+					case 'q':
+					case 'Q':
+						gameArr[row][file].Content = new Queen(char.IsUpper(ch) ? "W" : "B");
+						break;
+					default:        // number
+						int n = int.Parse(ch.ToString());
+						file += n - 1;
+						break;
+				}
+				if (ch != '/') file++;
+			}
+
+			// Castling rights
+			bool Q = stringarr[2].ToString().Contains("Q");
+			bool K = stringarr[2].ToString().Contains("K");
+			bool q = stringarr[2].ToString().Contains("q");
+			bool k = stringarr[2].ToString().Contains("k");
+
+			if (Q)
+			{
+				gameArr[7][0].Content.HasMoved = false;
+				Wking.Content.HasMoved = false;
+			}
+			if (K)
+			{
+				gameArr[7][7].Content.HasMoved = false;
+				Wking.Content.HasMoved = false;
+			}
+
+			if (q)
+			{
+				gameArr[0][0].Content.HasMoved = false;
+				Bking.Content.HasMoved = false;
+			}
+			if (k)
+			{
+				gameArr[0][7].Content.HasMoved = false;
+				Bking.Content.HasMoved = false;
+			}
+
+			// en passant
+			if (stringarr[3] != "-")
+			{
+				char f = stringarr[3][0];
+				int _file = (int)f - (int)'a';
+
+				char r = stringarr[3][1];
+				int _row = Math.Abs(int.Parse(r.ToString()) - 8);
+
+
+				EnPassantAttackSquare = gameArr[_row][_file];
+				EnPassantAttackSquare.EnPassantFlag = true;
+				if (_row == 2)		// black en passant attack square
+				EnPassantRemoveSquare = gameArr[_row + 1][_file];
+				else				// white en passant atack square
+				EnPassantRemoveSquare = gameArr[_row - 1][_file];
+
+			}
 		}
 
 		public string getFen()
@@ -248,8 +345,6 @@ namespace Chess_SchoolProject
 
 			fen += "0 0";
 
-
-			MessageBox.Show(fen);
 			return fen;
 		}
 
@@ -395,6 +490,18 @@ namespace Chess_SchoolProject
 			}
 			EnPassantAttackSquare = null;
 			EnPassantRemoveSquare = null;
+		}
+
+		private void ClearBoard()
+		{
+			RemoveEnPasssantRefs();
+			for (int i = 0; i < 8; i++)
+			{
+				for (int j = 0; j < 8; j++)
+				{
+					gameArr[i][j].Content = null;
+				}
+			}
 		}
 
 		private void ChangeTurn()
