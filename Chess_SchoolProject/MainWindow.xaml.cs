@@ -128,5 +128,13 @@ namespace Chess_SchoolProject
 			e.Handled = true;
 		}
 
+        private void rb_PromotionChecked(object sender, RoutedEventArgs e)
+        {
+			RadioButton rb = sender as RadioButton;
+			if (Game != null)
+			{
+				Game.PieceToPromote = rb.Name.ToString();
+			}
+		}
 	}
 }

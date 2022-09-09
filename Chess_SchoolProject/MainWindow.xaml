@@ -66,25 +66,47 @@
 						   Grid.Column="1"
 						   HorizontalAlignment="Center"
 						   VerticalAlignment="Center"/>
-
+				<StackPanel Orientation="Horizontal"
+							Grid.Column="0"
+							HorizontalAlignment="Left">
+					<RadioButton x:Name="queen"
+								 FontSize="16"
+								 Foreground="White"
+								 GroupName="Promotion"
+								 IsChecked="True"
+								 Checked="rb_PromotionChecked">
+						<Image Source="./Resources/Wqueen.png"/>
+					</RadioButton>
+					
+					<RadioButton x:Name="rook"
+								 FontSize="16"
+								 Foreground="White"
+								 GroupName="Promotion"
+								 Checked="rb_PromotionChecked">
+						<Image Source="./Resources/Wrook.png"/>
+					</RadioButton>
+					
+					<RadioButton x:Name="bishop"
+								 FontSize="16"
+								 Foreground="White"
+								 GroupName="Promotion"
+								 Checked="rb_PromotionChecked">
+						<Image Source="./Resources/Wbishop.png"/>
+					</RadioButton>
+					
+					<RadioButton x:Name="knight"
+								 FontSize="16"
+								 Foreground="White"
+								 GroupName="Promotion"
+								 Checked="rb_PromotionChecked">
+						<Image Source="./Resources/Wknight.png"/>
+					</RadioButton>
+					
+				</StackPanel>
 				<StackPanel Orientation="Horizontal"
 							HorizontalAlignment="Right"
 							Grid.Column="2">
-					<Button Content="Play Local"
-							Background="#DCD7C9"
-							Foreground="#2C3639"
-							FontSize="16"
-							Height="32"
-							FontWeight="Bold"
-							Margin="10,0,10,0"/>
-					<Button Content="Play Online"
-							Background="#DCD7C9"
-							Foreground="#2C3639"
-							FontSize="16"
-							Height="32"
-							FontWeight="Bold"
-							Margin="10,0,10,0"/>
-					<Button Content="Play Settings"
+					<Button Content="Load FEN"
 							Background="#DCD7C9"
 							Foreground="#2C3639"
 							FontSize="16"

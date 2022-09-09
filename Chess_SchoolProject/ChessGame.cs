@@ -14,7 +14,7 @@ namespace Chess_SchoolProject
 
 		public List<List<Square>> gameArr;
 		public ItemsControl gridControl { get; set; }
-
+		public string PieceToPromote { get; set; }
 
 		string Turn = "W";
 		Square EnPassantAttackSquare;
@@ -220,8 +220,20 @@ namespace Chess_SchoolProject
 			}
 
 			fen += " " + Turn.ToLower() + " "; // player move
-
-			fen += "- ";  // castling rights, TODO !!!
+			
+			// castling rights
+			if (!Wking.Content.HasMoved && gameArr[7][7].Content is Rook && !gameArr[7][7].Content.HasMoved) fen += "K";
+			if (!Wking.Content.HasMoved && gameArr[7][0].Content is Rook && !gameArr[7][0].Content.HasMoved) fen += "Q";
+			
+			if (!Bking.Content.HasMoved && gameArr[0][7].Content is Rook && !gameArr[0][7].Content.HasMoved) fen += "k";
+			if (!Bking.Content.HasMoved && gameArr[0][0].Content is Rook && !gameArr[0][0].Content.HasMoved) fen += "q";
+				
+			// neither side can castle
+			if (fen[fen.Length-1] == ' ')
+			{
+				fen += "-";
+			}
+			fen += " ";
 
 			// enpassant square
 			if (EnPassantAttackSquare != null)
@@ -338,7 +350,31 @@ namespace Chess_SchoolProject
 				EnPassantRemoveSquare.Content = null;
 
 				RemoveEnPasssantRefs();
+			} else if (moveTo.Row == 0 || moveTo.Row == 7)	// pawn promotion
+			{
+				IFigure piece = new Queen(Turn);
+				switch (PieceToPromote)
+				{
+					case "queen":
+						piece = new Queen(Turn);
+						break;
+					case "rook":
+						piece = new Rook(Turn);
+						break;
+					case "bishop":
+						piece = new Bishop(Turn);
+						break;
+					case "knight":
+						piece = new Knight(Turn);
+						break;
+				}
+				RemoveEnPasssantRefs();
+
+				moveFrom.Content = null;
+				piece.HasMoved = true;
+				moveTo.Content = piece;
 			}
+
 			else MovePiece(moveFrom, moveTo);
 		}
 
