@@ -18,7 +18,7 @@
 				   Drop="Grid_Drop"
 				   PreviewDragEnter="Grid_Enter"
 				   PreviewDragLeave="Grid_Leave"
-				   MouseRightButtonDown="DEBUG">
+				   MouseRightButtonDown="Grid_RighClick">
 				<Image Source="{Binding Content.ImgPath}" Stretch="Fill"
 					   MouseEnter="Img_MouseEnter"
 					   MouseLeave="Img_MouseLeave"

@@ -79,11 +79,11 @@ namespace Chess_SchoolProject
 			RemoveBorder(sourceLabel);
 		}
 
-		private void DEBUG(object sender, MouseButtonEventArgs e)
+		private void Grid_RighClick(object sender, MouseButtonEventArgs e)
 		{
 			Label sourceLabel = sender as Label;
 			Square source = (Square)sourceLabel.DataContext;
-
+			Clipboard.SetText(Game.getFen());
 			MessageBox.Show(Game.getFen());
 		}
 

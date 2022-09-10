@@ -47,6 +47,8 @@ namespace Chess_SchoolProject
 
 		private void InitializeFigures()
 		{
+			// Set game state to match starting position
+
 			// Starting player
 			Turn = "W";
 
@@ -87,7 +89,7 @@ namespace Chess_SchoolProject
 
 		public void Move(Square moveFrom, Square moveTo)
 		{
-			//MessageBox.Show(getFen());
+			// if move is valid do it && determine checkmate, else do nothing
 
 			if (moveFrom == moveTo) return;
 
@@ -114,7 +116,7 @@ namespace Chess_SchoolProject
 				King wk = Wking.Content as King;
 				King bk = Bking.Content as King;
 
-				bool checkmate = false;
+				string checkmate_result = "";
 				if (Turn == "W")
 				{
 					if (wk.IsInCheck(Wking, this))
@@ -125,7 +127,7 @@ namespace Chess_SchoolProject
 					if (bk.IsInCheck(Bking, this))
 					{
 						ChangeTurn();
-						checkmate = run_cmd("..\\..\\checkmate.py", getFen());
+						checkmate_result = run_cmd("..\\..\\checkmate.py", getFen());
 						ChangeTurn();
 					}
 				}
@@ -139,12 +141,12 @@ namespace Chess_SchoolProject
 					if (wk.IsInCheck(Wking, this))
 					{
 						ChangeTurn();
-						checkmate = run_cmd("..\\..\\checkmate.py", getFen());
+						checkmate_result = run_cmd("..\\..\\checkmate.py", getFen());
 						ChangeTurn();
 					}
 				}
 				
-				if (checkmate) 
+				if (checkmate_result.Contains("True"))
 				{ 
 					MessageBox.Show("Player " + Turn + " Won");
 					InitializeFigures(); 
@@ -159,6 +161,8 @@ namespace Chess_SchoolProject
 		
 		public void loadFen(string fen)
 		{
+			// Sets game state to match given FEN notation
+
 			// clear board
 			ClearBoard();
 
@@ -270,6 +274,8 @@ namespace Chess_SchoolProject
 
 		public string getFen()
 		{
+			// Returns string with current position written in FEN notation
+
 			string fen = "";
 			for (int i = 0; i < 8 ; i++)
 			{
@@ -354,6 +360,8 @@ namespace Chess_SchoolProject
 		private void UndoMove(Square moveFrom, IFigure moveFromContent, bool moveFromHasMoved,
 							  Square moveTo, IFigure moveToContent, bool moveToHasMoved)
 		{
+			// Is being called when your move gives your king in check
+
 			moveFrom.Content = moveFromContent;
 			moveFrom.Content.HasMoved = moveFromHasMoved;
 
@@ -366,6 +374,8 @@ namespace Chess_SchoolProject
 		}
 		private void MoveKing(Square moveFrom, Square moveTo)
 		{
+			// King movement handler
+
 			// castle movement handling
 			if (moveTo.Content is Rook &&
 				moveFrom.Content.Color == moveTo.Content.Color &&
@@ -420,6 +430,8 @@ namespace Chess_SchoolProject
 
 		private void MovePawn(Square moveFrom, Square moveTo)
 		{
+			// Pawn movement handler
+
 			if (Math.Abs(moveFrom.Row - moveTo.Row) == 2)  // en passant move
 			{
 				RemoveEnPasssantRefs();
@@ -478,6 +490,8 @@ namespace Chess_SchoolProject
 
 		private void MovePiece(Square moveFrom, Square moveTo)
 		{
+			// Generic piece movement handler
+
 			RemoveEnPasssantRefs();
 
 			moveFrom.Content.HasMoved = true;
@@ -487,6 +501,10 @@ namespace Chess_SchoolProject
 
 		private void RemoveEnPasssantRefs()
 		{
+			// Set all EnPassant variables to null
+			// Used to unmark squares after EnPassant move is no
+			// longer available.
+
 			if (EnPassantRemoveSquare != null)
 			{
 				EnPassantAttackSquare.EnPassantFlag = false;
@@ -497,6 +515,7 @@ namespace Chess_SchoolProject
 
 		private void ClearBoard()
 		{
+			// Clear game board
 			RemoveEnPasssantRefs();
 			for (int i = 0; i < 8; i++)
 			{
@@ -509,11 +528,10 @@ namespace Chess_SchoolProject
 
 		private void ChangeTurn()
 		{
-			if (Turn == "W") Turn = "B";
-			else Turn = "W";
+			Turn = (Turn == "W" ? "B" : "W");
 		}
 
-		private bool run_cmd(string cmd, string args)
+		private string run_cmd(string cmd, string args)
 		{
 			ProcessStartInfo start = new ProcessStartInfo();
 			start.FileName = "C:\\Users\\erikb\\AppData\\Local\\Microsoft\\WindowsApps\\python.exe";
@@ -525,11 +543,7 @@ namespace Chess_SchoolProject
 				using (StreamReader reader = process.StandardOutput)
 				{
 					string result = reader.ReadToEnd();
-					if (result.Contains("True"))
-					{
-						return true;
-					}
-					return false;
+					return result;
 				}
 			}
 		}
