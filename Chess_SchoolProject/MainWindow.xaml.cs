@@ -32,7 +32,7 @@ namespace Chess_SchoolProject
 			// Get the current mouse position
 			Point mousePos = e.GetPosition(null);
 			Vector diff = startPoint - mousePos;
-
+			
 			if (e.LeftButton == MouseButtonState.Pressed &&
 				(Math.Abs(diff.X) > SystemParameters.MinimumHorizontalDragDistance ||
 				Math.Abs(diff.Y) > SystemParameters.MinimumVerticalDragDistance))

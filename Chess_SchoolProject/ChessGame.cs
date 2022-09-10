@@ -285,7 +285,7 @@ namespace Chess_SchoolProject
 					if (gameArr[i][j].Content == null)
 					{
 						char[] chararr = fen.ToCharArray();
-						if (Char.IsNumber(chararr[fen.Length - 1]))
+						if (fen != "" && Char.IsNumber(chararr[fen.Length - 1]))
 						{
 							int n = int.Parse(chararr[fen.Length - 1].ToString());
 							n++;
