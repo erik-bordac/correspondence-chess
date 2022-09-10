@@ -181,6 +181,7 @@ namespace Chess_SchoolProject
 					case 'r':
 					case 'R':
 						gameArr[row][file].Content = new Rook(char.IsUpper(ch) ? "W" : "B");
+						gameArr[row][file].Content.HasMoved = true;
 						break;
 					case 'n':
 					case 'N':
@@ -193,6 +194,7 @@ namespace Chess_SchoolProject
 					case 'k':
 					case 'K':
 						gameArr[row][file].Content = new King(char.IsUpper(ch) ? "W" : "B");
+						gameArr[row][file].Content.HasMoved = true;
 						if (char.IsUpper(ch))
 						{
 							Wking = gameArr[row][file];
@@ -204,6 +206,7 @@ namespace Chess_SchoolProject
 					case 'p':
 					case 'P':
 						gameArr[row][file].Content = new Pawn(char.IsUpper(ch) ? "W" : "B");
+						if (!(row == 1 || row == 6)) gameArr[row][file].Content.HasMoved = true;
 						break;
 					case 'q':
 					case 'Q':
