@@ -12,7 +12,6 @@ namespace Chess_SchoolProject
 {
 	class ChessGame
 	{
-
 		public List<List<Square>> gameArr;
 		public ItemsControl gridControl { get; set; }
 		public string PieceToPromote { get; set; }
@@ -162,6 +161,7 @@ namespace Chess_SchoolProject
 		public void loadFen(string fen)
 		{
 			// Sets game state to match given FEN notation
+			// Doesnt check if given fen is valid
 
 			// clear board
 			ClearBoard();
@@ -335,7 +335,7 @@ namespace Chess_SchoolProject
 			if (!Bking.Content.HasMoved && gameArr[0][0].Content is Rook && !gameArr[0][0].Content.HasMoved) fen += "q";
 				
 			// neither side can castle
-			if (fen[fen.Length-1] == ' ')
+			if (fen[fen.Length-1] == ' ')	// nothing is appended from castling rights
 			{
 				fen += "-";
 			}
@@ -533,8 +533,10 @@ namespace Chess_SchoolProject
 
 		private string run_cmd(string cmd, string args)
 		{
+			// Execute python script in cmd, return result from stdout
+
 			ProcessStartInfo start = new ProcessStartInfo();
-			start.FileName = "C:\\Users\\erikb\\AppData\\Local\\Microsoft\\WindowsApps\\python.exe";
+			start.FileName = "C:\\Users\\erikb\\AppData\\Local\\Microsoft\\WindowsApps\\python.exe";	// python.exe absolute path
 			start.Arguments = string.Format("{0} \"{1}\"", cmd, args);
 			start.UseShellExecute = false;
 			start.RedirectStandardOutput = true;
