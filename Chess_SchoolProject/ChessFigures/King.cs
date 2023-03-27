@@ -76,40 +76,48 @@ namespace Chess_SchoolProject.ChessFigures
 		private bool IsAttackedOnDiagonal(Square source, ChessGame game)
 		{
 			// pawn check
-			try
+			if (Color == "W")
 			{
-				if (Color == "W")
-				{	
-
-					Square target1 = game.gameArr[source.Row - 1][source.File - 1];
-					Square target2 = game.gameArr[source.Row - 1][source.File + 1];
-					if (target1.Content != null && target1.Content.Color != Color && target1.Content is Pawn)
-					{
-						return true;
-					}
-					if (target2.Content != null && target2.Content.Color != Color && target2.Content is Pawn)
-					{
-						return true;
-					}
-				} else
+				if (isValidCoord(source.Row - 1, source.File - 1))
 				{
-					Square target1 = game.gameArr[source.Row + 1][source.File - 1];
-					Square target2 = game.gameArr[source.Row + 1][source.File + 1];
+					Square target1 = game.gameArr[source.Row - 1][source.File - 1];
 					if (target1.Content != null && target1.Content.Color != Color && target1.Content is Pawn)
 					{
 						return true;
 					}
+				}
+				if (isValidCoord(source.Row - 1, source.File + 1))
+				{
+					Square target2 = game.gameArr[source.Row - 1][source.File + 1];
 					if (target2.Content != null && target2.Content.Color != Color && target2.Content is Pawn)
 					{
 						return true;
 					}
 				}
-			} catch (ArgumentOutOfRangeException) { }
+			} else
+			{
+				if (isValidCoord(source.Row + 1, source.File - 1))
+				{
+					Square target1 = game.gameArr[source.Row + 1][source.File - 1];
+					if (target1.Content != null && target1.Content.Color != Color && target1.Content is Pawn)
+					{
+						return true;
+					}
+				}
+				if (isValidCoord(source.Row + 1, source.File + 1))
+				{
+					Square target2 = game.gameArr[source.Row + 1][source.File + 1];
+					if (target2.Content != null && target2.Content.Color != Color && target2.Content is Pawn)
+					{
+						return true;
+					}
+				}
+			}
 			
 			// upleft
 			for (int i = 1; i < 8; i++)
 			{
-				try
+				if (isValidCoord(source.Row - i, source.File - i))
 				{
 					Square targetSquare = game.gameArr[source.Row - i][source.File - i];
 
@@ -126,13 +134,13 @@ namespace Chess_SchoolProject.ChessFigures
 						else break;
 					}
 				}
-				catch (ArgumentOutOfRangeException) { break; }
+				else break;
 			}
 
 			// upright
 			for (int i = 1; i < 8; i++)
 			{
-				try
+				if (isValidCoord(source.Row - i, source.File + i))
 				{
 					Square targetSquare = game.gameArr[source.Row - i][source.File + i];
 
@@ -149,13 +157,13 @@ namespace Chess_SchoolProject.ChessFigures
 						else break;
 					}
 				}
-				catch (ArgumentOutOfRangeException) { break; }
+				else break;
 			}
 
 			// downleft
 			for (int i = 1; i < 8; i++)
 			{
-				try
+				if (isValidCoord(source.Row + i, source.File - i))
 				{
 					Square targetSquare = game.gameArr[source.Row + i][source.File - i];
 
@@ -172,13 +180,13 @@ namespace Chess_SchoolProject.ChessFigures
 						else break;
 					}
 				}
-				catch (ArgumentOutOfRangeException) { break; }
+				else break;
 			}
 
 			// downright
 			for (int i = 1; i < 8; i++)
 			{
-				try
+				if (isValidCoord(source.Row + i, source.File + i))
 				{
 					Square targetSquare = game.gameArr[source.Row + i][source.File + i];
 
@@ -195,7 +203,7 @@ namespace Chess_SchoolProject.ChessFigures
 						else break;
 					}
 				}
-				catch (ArgumentOutOfRangeException) { break; }
+				else break;
 			}
 
 			return false;
@@ -207,15 +215,16 @@ namespace Chess_SchoolProject.ChessFigures
 
 			foreach ((int, int)move in moves)
 			{
-				try
+				int x = source.Row + move.Item1;
+				int y = source.File + move.Item2;
+				if (isValidCoord(x,y))
 				{
-					if (game.gameArr[source.Row + move.Item1][source.File + move.Item2].Content is Knight &&
-						game.gameArr[source.Row + move.Item1][source.File + move.Item2].Content.Color != Color)
+					if (game.gameArr[x][y].Content is Knight &&
+						game.gameArr[x][y].Content.Color != Color)
 					{
 						return true;
 					}
-				} catch (ArgumentOutOfRangeException) { continue; }
-
+				}
 			}
 			return false;
 		}
@@ -225,7 +234,7 @@ namespace Chess_SchoolProject.ChessFigures
 			// rowleft
 			for(int i = 1; i<8; i++)
 			{
-				try
+				if (isValidCoord(source.Row, source.File - i))
 				{
 					Square targetSquare = game.gameArr[source.Row][source.File - i];
 
@@ -236,19 +245,19 @@ namespace Chess_SchoolProject.ChessFigures
 					{
 						if (targetSquare.Content is Rook ||
 							targetSquare.Content is Queen)
-						{ 
+						{
 							return true;
 						}
 						else break;
 					}
 				}
-				catch (ArgumentOutOfRangeException) { break; }
+				else break;
 			}
 
 			// rowright
 			for (int i = 1; i < 8; i++)
 			{
-				try
+				if (isValidCoord(source.Row, source.File + i))
 				{
 					Square targetSquare = game.gameArr[source.Row][source.File + i];
 
@@ -264,14 +273,13 @@ namespace Chess_SchoolProject.ChessFigures
 						}
 						else break;
 					}
-				}
-				catch (ArgumentOutOfRangeException) { break; }
+				} else break;
 			}
 
 			// columnup
 			for (int i = 1; i<8; i++)
 			{
-				try
+				if (isValidCoord(source.Row - i, source.File))
 				{
 					Square targetSquare = game.gameArr[source.Row - i][source.File];
 
@@ -282,19 +290,19 @@ namespace Chess_SchoolProject.ChessFigures
 					{
 						if (targetSquare.Content is Rook ||
 							targetSquare.Content is Queen)
-						{ 
+						{
 							return true;
 						}
 						else break;
 					}
 				}
-				catch (ArgumentOutOfRangeException) { break; }
+				else break;
 			}
 
 			// columndown
 			for (int i = 1; i<8; i++)
 			{
-				try
+				if (isValidCoord(source.Row + i, source.File))
 				{
 					Square targetSquare = game.gameArr[source.Row + i][source.File];
 
@@ -305,16 +313,24 @@ namespace Chess_SchoolProject.ChessFigures
 					{
 						if (targetSquare.Content is Rook ||
 							targetSquare.Content is Queen)
-						{ 
+						{
 							return true;
 						}
 						else break;
 					}
 				}
-				catch (ArgumentOutOfRangeException) { break; }
+				else break;
 			}
 
 			return false;
+		}
+
+		private bool isValidCoord(int x, int y)
+		{
+			if (x < 0 || x > 7 ||
+				y < 0 || y > 7) return false;
+
+			return true;
 		}
 	}
 }
