@@ -59,5 +59,24 @@ namespace Chess_SchoolProject.ChessFigures
 			}
 			else return false;
 		}
+
+		public List<(int, int)> getValidMoves(Square source, ChessGame game)
+		{
+			var moves = new List<(int, int)>();
+
+			int colorScalar = 1;
+			if (Color == "W") colorScalar *= -1;
+
+			for (int i = 1; i <= 2; i++)
+			{
+				if (game.gameArr[source.Row + (i * colorScalar)][source.File].Content == null)
+				{
+					break;
+				}
+				moves.Add((source.Row + (i * colorScalar), source.File));
+			}
+
+			return moves;
+		}
 	}
 }

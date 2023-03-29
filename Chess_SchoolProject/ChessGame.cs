@@ -115,7 +115,18 @@ namespace Chess_SchoolProject
 				King wk = Wking.Content as King;
 				King bk = Bking.Content as King;
 
-				string checkmate_result = "";
+				bool result = false;
+				//string checkmate_result = "";
+				for (int i=0; i<1000; i++)
+				{
+					wk.IsInCheck(Wking, this);
+				}
+
+				if (temporaryMove)
+				{
+					return;
+				}
+
 				if (Turn == "W")
 				{
 					if (wk.IsInCheck(Wking, this))
@@ -125,9 +136,8 @@ namespace Chess_SchoolProject
 					}
 					if (bk.IsInCheck(Bking, this))
 					{
-						ChangeTurn();
-						checkmate_result = run_cmd("..\\..\\checkmate.py", getFen());
-						ChangeTurn();
+						result = IsCheckmate();
+						MessageBox.Show(result.ToString());
 					}
 				}
 				else
@@ -139,13 +149,12 @@ namespace Chess_SchoolProject
 					}
 					if (wk.IsInCheck(Wking, this))
 					{
-						ChangeTurn();
-						checkmate_result = run_cmd("..\\..\\checkmate.py", getFen());
-						ChangeTurn();
+						result = IsCheckmate();
+						MessageBox.Show(result.ToString());
 					}
 				}
 				
-				if (checkmate_result.Contains("True"))
+				if (result)
 				{ 
 					MessageBox.Show("Player " + Turn + " Won");
 					InitializeFigures(); 
@@ -361,6 +370,16 @@ namespace Chess_SchoolProject
 							  Square moveTo, IFigure moveToContent, bool moveToHasMoved)
 		{
 			// Is being called when your move gives your king in check
+			if (moveFromContent is King)
+			{
+				if (moveFromContent.Color == "W")
+				{
+					Wking = moveFrom;
+				} else
+				{
+					Bking = moveFrom;
+				}
+			}
 
 			moveFrom.Content = moveFromContent;
 			moveFrom.Content.HasMoved = moveFromHasMoved;
@@ -531,6 +550,61 @@ namespace Chess_SchoolProject
 			Turn = (Turn == "W" ? "B" : "W");
 		}
 
+		private bool IsCheckmate()
+		{
+			temporaryMove = true;
+			ChangeTurn();
+			for (int i = 0; i<gameArr.Count; i++)
+			{
+				for (int j = 0; j<gameArr.Count; j++)
+				{
+					List<(int, int)> moves = new List<(int, int)>();
+					if (gameArr[i][j].Content != null && gameArr[i][j].Content.Color == Turn)
+					{
+						moves = gameArr[i][j].Content.getValidMoves(gameArr[i][j], this);
+					}
+
+					foreach ((int row,int file) in moves)
+					{
+						var turn = Turn;
+						var moveFromFigure = gameArr[i][j].Content;
+						bool moveFromHasMoved = moveFromFigure.HasMoved;
+						var moveToFigure = gameArr[row][file].Content;
+						bool moveToHasMoved = moveFromFigure.HasMoved;
+
+						Move(gameArr[i][j], gameArr[row][file]);
+						if (Turn == "W")
+						{
+							var wk = Wking.Content as King;
+							if (!wk.IsInCheck(Wking, this))
+							{
+								UndoMove(gameArr[i][j], moveFromFigure, moveFromHasMoved, gameArr[row][file], moveToFigure, moveToHasMoved);
+								temporaryMove = false;
+								ChangeTurn();
+								return false;
+							}
+						} else
+						{
+							var bk = Bking.Content as King;
+							if (!bk.IsInCheck(Bking, this))
+							{
+								UndoMove(gameArr[i][j], moveFromFigure, moveFromHasMoved, gameArr[row][file], moveToFigure, moveToHasMoved);
+								temporaryMove = false;
+								ChangeTurn();
+								return false;
+							}
+						}
+
+						UndoMove(gameArr[i][j], moveFromFigure, moveFromHasMoved, gameArr[row][file], moveToFigure, moveToHasMoved);
+					}
+				}
+			}
+
+			temporaryMove = false;
+			return true;
+		}
+
+		private bool temporaryMove = false;
 		private string run_cmd(string cmd, string args)
 		{
 			// Execute python script in cmd, return result from stdout

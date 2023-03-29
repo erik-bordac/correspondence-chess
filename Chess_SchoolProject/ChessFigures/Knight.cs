@@ -30,5 +30,23 @@ namespace Chess_SchoolProject.ChessFigures
 			}
 			else return false;
 		}
+
+		public List<(int, int)> getValidMoves(Square source, ChessGame game)
+		{
+			var moves = new List<(int, int)>();
+
+			for (int i = 0; i < game.gameArr.Count; i++)
+			{
+				for (int j = 0; j < game.gameArr.Count; j++)
+				{
+					if (IsValidMove(source, game.gameArr[i][j], game))
+					{
+						moves.Add((i, j));
+					}
+				}
+			}
+
+			return moves;
+		}
 	}
 }

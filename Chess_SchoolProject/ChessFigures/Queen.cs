@@ -12,7 +12,7 @@ namespace Chess_SchoolProject.ChessFigures
 		public string ImgPath { get; set; }
 		public string Color { get; set; }
 
-		public Queen (string color)
+		public Queen(string color)
 		{
 			Color = color;
 
@@ -121,8 +121,26 @@ namespace Chess_SchoolProject.ChessFigures
 					if (checkedRow == target.Row && checkedFile == target.File) return true;
 				}
 			}
-			
+
 			return false;
+		}
+
+		public List<(int, int)> getValidMoves(Square source, ChessGame game)
+		{
+			var moves = new List<(int, int)>();
+
+			for (int i = 0; i < game.gameArr.Count; i++)
+			{
+				for (int j = 0; j < game.gameArr.Count; j++)
+				{
+					if (IsValidMove(source, game.gameArr[i][j], game))
+					{
+						moves.Add((i, j));
+					}
+				}
+			}
+
+			return moves;
 		}
 	}
 }

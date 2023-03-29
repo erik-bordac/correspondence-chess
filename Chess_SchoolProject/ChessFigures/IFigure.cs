@@ -12,5 +12,7 @@ namespace Chess_SchoolProject.ChessFigures
 		string Color { get; set; }
 		bool HasMoved { get; set; }
 		bool IsValidMove(Square source, Square target, ChessGame game);
+
+		List<(int, int)> getValidMoves(Square source, ChessGame game);
 	}
 }
