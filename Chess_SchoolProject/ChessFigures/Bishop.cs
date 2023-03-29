@@ -21,57 +21,37 @@ namespace Chess_SchoolProject.ChessFigures
 
 		public bool IsValidMove(Square source, Square target, ChessGame game)
 		{
-			if (target.Content != null && source.Content.Color == target.Content.Color) return false;
-
-			bool diagonal1 = true;
-			bool diagonal2 = true;
-			bool diagonal3 = true;
-			bool diagonal4 = true;
-
-			for (int i = 1; i < 8; i++)
+			if (target.Content != null && source.Content.Color == target.Content.Color)
 			{
-				if (diagonal1)
-				{
-					int checkedRow = source.Row + i; int checkedFile = source.File + i;
-
-					if (checkedRow > 7 || checkedFile > 7) diagonal1 = false;
-
-					if (diagonal1 && game.gameArr[checkedRow][checkedFile].Content != null) diagonal1 = false;
-
-					if (checkedRow == target.Row && checkedFile == target.File) return true;
-				}
-				if (diagonal2)
-				{
-					int checkedRow = source.Row + i; int checkedFile = source.File - i;
-
-					if (checkedRow > 7 || checkedFile > 7 || checkedFile < 0) diagonal2 = false;
-
-					if (diagonal2 && game.gameArr[checkedRow][checkedFile].Content != null) diagonal2 = false;
-
-					if (checkedRow == target.Row && checkedFile == target.File) return true;
-				}
-				if (diagonal3)
-				{
-					int checkedRow = source.Row - i; int checkedFile = source.File + i;
-
-					if (checkedRow > 7 || checkedFile > 7 || checkedRow < 0) diagonal3 = false;
-
-					if (diagonal3 && game.gameArr[checkedRow][checkedFile].Content != null) diagonal3 = false;
-
-					if (checkedRow == target.Row && checkedFile == target.File) return true;
-				}
-				if (diagonal4)
-				{
-					int checkedRow = source.Row - i; int checkedFile = source.File - i;
-
-					if (checkedRow > 7 || checkedFile > 7 || checkedRow < 0 || checkedFile < 0) diagonal4 = false;
-
-					if (diagonal4 && game.gameArr[checkedRow][checkedFile].Content != null) diagonal4 = false;
-
-					if (checkedRow == target.Row && checkedFile == target.File) return true;
-				}
+				return false;
 			}
-			return false;
+
+			int rowDiff = target.Row - source.Row;
+			int fileDiff = target.File - source.File;
+
+			if (Math.Abs(rowDiff) != Math.Abs(fileDiff))
+			{
+				return false;
+			}
+
+			int rowStep = Math.Sign(rowDiff);
+			int fileStep = Math.Sign(fileDiff);
+
+			int currentRow = source.Row + rowStep;
+			int currentFile = source.File + fileStep;
+
+			while (currentRow != target.Row || currentFile != target.File)
+			{
+				if (game.gameArr[currentRow][currentFile].Content != null)
+				{
+					return false;
+				}
+
+				currentRow += rowStep;
+				currentFile += fileStep;
+			}
+
+			return true;
 		}
 
 		public List<(int, int)> getValidMoves(Square source, ChessGame game)
