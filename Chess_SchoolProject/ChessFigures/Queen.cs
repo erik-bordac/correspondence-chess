@@ -18,111 +18,40 @@ namespace Chess_SchoolProject.ChessFigures
 
 			ImgPath = (Color == "W") ? "./Resources/Wqueen.png" : "./Resources/Bqueen.png";
 		}
-
+		
 		public bool IsValidMove(Square source, Square target, ChessGame game)
 		{
-			if (target.Content != null && source.Content.Color == target.Content.Color) return false;
-
-			bool row1 = true;
-			bool row2 = true;
-			bool file1 = true;
-			bool file2 = true;
-			for (int i = 1; i < 8; i++)
+			if (target.Content != null && source.Content.Color == target.Content.Color)
 			{
-				if (row1)
-				{
-					int checkedRow = source.Row + i;
-
-					if (checkedRow > 7) row1 = false;
-
-					if (row1 && game.gameArr[checkedRow][source.File].Content != null) row1 = false;
-
-					if (checkedRow == target.Row && source.File == target.File) return true;
-				}
-				if (row2)
-				{
-					int checkedRow = source.Row - i;
-
-					if (checkedRow < 0) row2 = false;
-
-					if (row2 && game.gameArr[checkedRow][source.File].Content != null) row2 = false;
-
-					if (checkedRow == target.Row && source.File == target.File) return true;
-				}
-
-				if (file1)
-				{
-					int checkedFile = source.File + i;
-
-					if (checkedFile > 7) file1 = false;
-
-					if (file1 && game.gameArr[source.Row][checkedFile].Content != null) file1 = false;
-
-					if (source.Row == target.Row && checkedFile == target.File) return true;
-				}
-
-				if (file2)
-				{
-					int checkedFile = source.File - i;
-
-					if (checkedFile < 0) file2 = false;
-
-					if (file2 && game.gameArr[source.Row][checkedFile].Content != null) file2 = false;
-
-					if (source.Row == target.Row && checkedFile == target.File) return true;
-				}
+				return false;
 			}
 
-			bool diagonal1 = true;
-			bool diagonal2 = true;
-			bool diagonal3 = true;
-			bool diagonal4 = true;
+			int rowDistance = Math.Abs(target.Row - source.Row);
+			int fileDistance = Math.Abs(target.File - source.File);
 
-			for (int i = 1; i < 8; i++)
+			if (rowDistance == 0 && fileDistance == 0)
 			{
-				if (diagonal1)
-				{
-					int checkedRow = source.Row + i; int checkedFile = source.File + i;
-
-					if (checkedRow > 7 || checkedFile > 7) diagonal1 = false;
-
-					if (diagonal1 && game.gameArr[checkedRow][checkedFile].Content != null) diagonal1 = false;
-
-					if (checkedRow == target.Row && checkedFile == target.File) return true;
-				}
-				if (diagonal2)
-				{
-					int checkedRow = source.Row + i; int checkedFile = source.File - i;
-
-					if (checkedRow > 7 || checkedFile > 7 || checkedFile < 0) diagonal2 = false;
-
-					if (diagonal2 && game.gameArr[checkedRow][checkedFile].Content != null) diagonal2 = false;
-
-					if (checkedRow == target.Row && checkedFile == target.File) return true;
-				}
-				if (diagonal3)
-				{
-					int checkedRow = source.Row - i; int checkedFile = source.File + i;
-
-					if (checkedRow > 7 || checkedFile > 7 || checkedRow < 0) diagonal3 = false;
-
-					if (diagonal3 && game.gameArr[checkedRow][checkedFile].Content != null) diagonal3 = false;
-
-					if (checkedRow == target.Row && checkedFile == target.File) return true;
-				}
-				if (diagonal4)
-				{
-					int checkedRow = source.Row - i; int checkedFile = source.File - i;
-
-					if (checkedRow > 7 || checkedFile > 7 || checkedRow < 0 || checkedFile < 0) diagonal4 = false;
-
-					if (diagonal4 && game.gameArr[checkedRow][checkedFile].Content != null) diagonal4 = false;
-
-					if (checkedRow == target.Row && checkedFile == target.File) return true;
-				}
+				return false;
 			}
 
-			return false;
+			int rowDirection = Math.Sign(target.Row - source.Row);
+			int fileDirection = Math.Sign(target.File - source.File);
+
+			int currentRow = source.Row + rowDirection;
+			int currentFile = source.File + fileDirection;
+
+			while (currentRow != target.Row || currentFile != target.File)
+			{
+				if (game.gameArr[currentRow][currentFile].Content != null)
+				{
+					return false;
+				}
+
+				currentRow += rowDirection;
+				currentFile += fileDirection;
+			}
+
+			return true;
 		}
 
 		public List<(int, int)> getValidMoves(Square source, ChessGame game)
