@@ -137,7 +137,6 @@ namespace Chess_SchoolProject
 					if (bk.IsInCheck(Bking, this))
 					{
 						result = IsCheckmate();
-						MessageBox.Show(result.ToString());
 					}
 				}
 				else
@@ -150,7 +149,6 @@ namespace Chess_SchoolProject
 					if (wk.IsInCheck(Wking, this))
 					{
 						result = IsCheckmate();
-						MessageBox.Show(result.ToString());
 					}
 				}
 				
