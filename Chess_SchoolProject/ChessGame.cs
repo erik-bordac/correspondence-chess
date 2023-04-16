@@ -603,23 +603,5 @@ namespace Chess_SchoolProject
 		}
 
 		private bool temporaryMove = false;
-		private string run_cmd(string cmd, string args)
-		{
-			// Execute python script in cmd, return result from stdout
-
-			ProcessStartInfo start = new ProcessStartInfo();
-			start.FileName = "C:\\Users\\erikb\\AppData\\Local\\Microsoft\\WindowsApps\\python.exe";	// python.exe absolute path
-			start.Arguments = string.Format("{0} \"{1}\"", cmd, args);
-			start.UseShellExecute = false;
-			start.RedirectStandardOutput = true;
-			using (Process process = Process.Start(start))
-			{
-				using (StreamReader reader = process.StandardOutput)
-				{
-					string result = reader.ReadToEnd();
-					return result;
-				}
-			}
-		}
 	}
 }

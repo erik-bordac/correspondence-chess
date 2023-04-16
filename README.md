@@ -4,20 +4,7 @@ Programming II task - Correspondence chess as WPF application.
 ## Requirements
 Microsoft Visual Studio
 
-python 3.7+
-
-python-chess https://github.com/niklasf/python-chess
-```
-pip install chess
-```
-
 ## How to use
-### Before first use
-Before using the application, in `ChessGame.cs` file in function `run_cmd()` change `start.FileName` to absolute path of `python.exe`
-This path can be obtained by running following command in cmd:
-```
-where python
-```
 
 ### Controls
 Figures can be moved using Drag&Drop. (Only valid moves can be played, invalid move results in nothing).
