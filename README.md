@@ -41,7 +41,7 @@ if given FEN is valid)
 * Responsive UI
 
 ## What this app doesn't do
-- Check for stalemate (In current implementation, doing this would result in executing python script after every move, which I think would be annoying.)
+- Check for stalemate
 - Check for 50-move draw rule or draw by repetition. 
 
 ![image info](UI_screenshot.png)
